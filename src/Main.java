@@ -35,6 +35,12 @@ public class Main {
                     System.exit(1); // exit the program
                 }
 
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 System.out.println(in.readLine()); // print out the data from the server
 
                 while (in.ready()) { // while the input stream is ready
