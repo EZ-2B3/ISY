@@ -7,6 +7,9 @@ import java.io.IOException;
  * @version 1.0
  */
 public class Main {
+    static Board board = new Board(); // create board
+    static String[][] bord = board.createBoard(); // create board
+    static String username; // create username
     public static void main(String[] args){
 
         Connection connection = new Connection(); // create connection to server
@@ -23,7 +26,7 @@ public class Main {
             System.out.println("Please enter your username:"); // prompt user for username
             String response; // create variable to store response from server
             try {
-                String username = connection.stdIn.readLine(); // read username from user
+                username = connection.stdIn.readLine(); // read username from user
                 connection.out.println("login " + username); // send username to server
                 response = Connection.in.readLine(); // read response from server
             } catch (IOException ex) { // if IOException is thrown
@@ -47,12 +50,6 @@ public class Main {
                         listener.interrupt(); // interrupt listener thread
                         System.exit(1); // exit program
                     }
-                    try { // try to sleep for 100 milliseconds
-                        //noinspection BusyWait
-                        Thread.sleep(100); // sleep for 100 milliseconds
-                    } catch (InterruptedException e) { // if thread is interrupted
-                        e.printStackTrace(); // print stack trace
-                    }
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -73,7 +70,29 @@ class Listener extends Thread { // class to listen for messages from server in a
         while (true) { // loop until thread is interrupted
             try { // try to read message from server
                 if (Connection.in.ready()) { // if message is ready to be read
-                    System.out.println(Connection.in.readLine()); // print message from server
+                    String message = Connection.in.readLine(); // read message from server
+                    if (message.contains("SVR GAME")) {
+                        if (message.contains("SVR GAME MATCH")) {
+                            Main.board.printBoard(Main.bord);
+                        }
+                        if (message.contains("SVR GAME MOVE")) {
+                            System.out.println(message);
+                            String[] move = message.split(" ");
+                            String alteredmove = move[6].replace("\"", "").replace(",", "");
+                            String altereduser = move[4].replace("\"", "").replace(",", "");
+                            int position = Integer.parseInt(alteredmove);
+                            if (altereduser.equals(Main.username)) {
+                                Main.board.changeBoard(Main.bord, position, "🤡");
+                            } else {
+                                Main.board.changeBoard(Main.bord, position, "🦧");
+                            }
+                            Main.board.printBoard(Main.bord);
+                        } else {
+                            System.out.println(message); // print message from server
+                        }
+                    } else {
+                        System.out.println(message); // print message from server
+                    }
                 }
             } catch (IOException e) { // if IOException is thrown
                 e.printStackTrace(); // print stack trace
