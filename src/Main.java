@@ -76,7 +76,6 @@ class Listener extends Thread { // class to listen for messages from server in a
                             Main.board.printBoard(Main.bord);
                         }
                         if (message.contains("SVR GAME MOVE")) {
-                            System.out.println(message);
                             String[] move = message.split(" ");
                             String alteredmove = move[6].replace("\"", "").replace(",", "");
                             String altereduser = move[4].replace("\"", "").replace(",", "");
