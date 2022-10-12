@@ -1,4 +1,4 @@
-# New Game Server
+# New Main Server
 
 Welcome to one of the best parts of your Hanze study.
 During this project you will write a client that can communicate with a game server.
@@ -15,9 +15,9 @@ With this game server you can play the following games:
 
 ## Running the server
 Download the server and run `java -jar newgameserver.jar`.
-This will start the Game Server and an HTTP server.
+This will start the Main Server and an HTTP server.
 
-Your client will talk with the Game Server on port 7789 using the text based protocol explained in the protocol.txt <br/>
+Your client will talk with the Main Server on port 7789 using the text based protocol explained in the protocol.txt <br/>
 To see the games and tournaments there is a webfrontend available on port [8081](http:localhost:8081).
 
 **Admin Account:** <br/>

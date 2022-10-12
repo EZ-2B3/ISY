@@ -1,6 +1,6 @@
-# New Game Server
+# New Main Server
 
-Game list
+Main list
 * Tic-tac-toe
 * Reversi [1] 
 * Connect4
@@ -8,7 +8,7 @@ Game list
 
 HTTP server (API & Frontend-app): port 8081
 
-Game server: port 7789
+Main server: port 7789
 
 Vue development server: port 8080 (development only)
 
@@ -20,7 +20,7 @@ Vue development server: port 8080 (development only)
 
 ## Running the server
 Download the server and run `java -jar newgameserver-*VERSION*.jar` where `*VERSION*` is the current version.
-This will start the Game Server and the HTTP server. 
+This will start the Main Server and the HTTP server. 
 
 
 **running a service on a different port:** <br/>
@@ -42,7 +42,7 @@ This will build the Vue frontend app AND the Java server and include both in the
 
 **Running `.jar`** </br>
 `java -jar build/libs/newgameserver-*VERSION*.jar` where `*VERSION*` is the current version.
-This will start the Game Server and the HTTP server.
+This will start the Main Server and the HTTP server.
 
 The HTTP server will handle API requests and will serve the frontend-app. 
 

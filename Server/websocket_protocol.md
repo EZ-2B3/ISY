@@ -23,9 +23,9 @@ Stuurt een `Player` object zodra deze speler/gameclient de gameserver heeft verl
 
 ## Games:
 ### `/topic/onnewgame`
-Stuurt een `Game` object zodra er een nieuw potje is begonnen op de gameserver.
+Stuurt een `Main` object zodra er een nieuw potje is begonnen op de gameserver.
 
-`Game.gameId` kan gebruikt worden om te subscriben op topics waarin `{gameId}` staat.
+`Main.gameId` kan gebruikt worden om te subscriben op topics waarin `{gameId}` staat.
 
 ### `/topic/ongameended`
 Stuurt een het `gameId` (`int`) van het potje dat is afgelopen.

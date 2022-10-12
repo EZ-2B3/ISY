@@ -1,59 +1,69 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
 
-
-
+/**
+ * Class to start the program and read the input from the user
+ *
+ * @author Reinder Noordmans
+ * @version 1.0
+ */
 public class Main {
-    public static void main(String[] args) {
-        String hostName = "localhost";
-        String portNumber = "7789";
+    public static void main(String[] args) throws IOException {
 
-        try (
-                Socket echoSocket = new Socket(hostName, Integer.parseInt(portNumber)); // create socket to connect to server
-                PrintWriter out = // create output stream to send data to server
-                        new PrintWriter(echoSocket.getOutputStream(), true);
-                BufferedReader in = // create input stream to receive data from server
-                        new BufferedReader(
-                                new InputStreamReader(echoSocket.getInputStream()));
-                BufferedReader stdIn = // create input stream to receive data from user
-                        new BufferedReader(
-                                new InputStreamReader(System.in))
-        ) {
-            int emptyLines = 0; // set emptyLines to 0
-            while (emptyLines < 2) { // while emptyLines is less than 2 print out the data from the server (the first 2 copyright lines)
-                System.out.println(in.readLine()); // print out the data from the server
-                emptyLines++; // increment emptyLines
+        Connection connection = new Connection(); // create connection to server
+
+        System.out.println(Connection.in.readLine()); // print version of server
+        System.out.println(Connection.in.readLine()); // print copy right message from server
+
+        boolean loggedIn = false; // flag to check if user is logged in
+        while (!loggedIn) { // loop until user is logged in
+            System.out.println("Please enter your username:"); // prompt user for username
+            String username = connection.stdIn.readLine(); // read username from user
+            connection.out.println("login " + username); // send username to server
+            String response = Connection.in.readLine(); // read response from server
+            System.out.println(response); // print response from server
+            if (response.equals("OK")) { // if response is OK
+                loggedIn = true; // set flag to true
             }
-            String userInput; // create string to store user input
-            while ((userInput = stdIn.readLine()) != null) { // while the user input is not null
-                out.println(userInput); // send the user input to the server
-                if (userInput.equals("exit")) { // if the user input is exit
-                    System.exit(1); // exit the program
-                }
+        }
 
+
+        String userInput; // variable to store user input
+        Listener listener = new Listener(); // create listener to listen for messages from server in a separate thread
+        listener.start(); // start listener thread
+        while (true) { // loop until user enters "quit"
+            if ((userInput = connection.stdIn.readLine()) != null && !userInput.equals("")) {
+                connection.out.println(userInput); // send user input to server
+                if (userInput.equals("quit") || userInput.equals("exit") || userInput.equals("disconnect")) { // if user enters "quit" or "exit" or "disconnect"
+                    listener.interrupt(); // interrupt listener thread
+                    System.exit(1); // exit program
+                }
                 try { // try to sleep for 100 milliseconds
-                    Thread.sleep(100); // wait 100 milliseconds
-                } catch (InterruptedException e) { // if the thread is interrupted
-                    e.printStackTrace(); // print the stack trace
-                } finally { // finally
-                    System.out.println(in.readLine()); // print out the data from the server
-                }
-                while (in.ready()) { // while the input stream is ready
-                    System.out.println(in.readLine()); // print out the data from the server
+                    Thread.sleep(100); // sleep for 100 milliseconds
+                } catch (InterruptedException e) { // if thread is interrupted
+                    e.printStackTrace(); // print stack trace
                 }
             }
-        } catch (UnknownHostException e) { // catch unknown host exception
-            System.err.println("Don't know about host " + hostName); // print out error message
-            System.exit(1); // exit the program
-        } catch (IOException e) { // catch io exception
-            System.err.println("Couldn't get I/O for the connection to " + // print out error message
-                    hostName);
-            System.exit(1); // exit the program
-
         }
     }
 }
+
+/**
+ * Class to listen for messages from server in a separate thread
+ *
+ * @author Reinder Noordmans
+ * @version 1.0
+ */
+class Listener extends Thread { // class to listen for messages from server in a separate thread
+    public void run() { // method to run when thread is started
+        while (true) { // loop until thread is interrupted
+            try { // try to read message from server
+                if (Connection.in.ready()) { // if message is ready to be read
+                    System.out.println(Connection.in.readLine()); // print message from server
+                }
+            } catch (IOException e) { // if IOException is thrown
+                e.printStackTrace(); // print stack trace
+            }
+        }
+    }
+}
+
