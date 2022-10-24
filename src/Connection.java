@@ -11,8 +11,8 @@ import java.net.Socket;
  * @version 1.0
  */
 public class Connection {
-    static String hostName = "localhost"; // host name of server
-    static String portNumber = "7789"; // port number of server
+    private static String hostName = "localhost"; // host name of server
+    private static String portNumber = "7789"; // port number of server
     Socket echoSocket; // create socket to connect to server
 
     {
@@ -23,7 +23,7 @@ public class Connection {
         }
     }
 
-    PrintWriter out;  // create output stream to send data to server
+    static PrintWriter out;  // create output stream to send data to server
 
     {
         try {
