@@ -7,6 +7,9 @@
 public class Board { // class to create the board for the game (CLI)
 
     public String[][] GameBoard; // create 2D array to store the game board
+    public boolean turn = false;
+    public String player = " ";
+    public int moves = 0;
         public Board(int rows, int cols) { // constructor to create the game board
                 GameBoard = CreateBoard(rows, cols); // create the game board
         }
