@@ -57,10 +57,12 @@ public class Render implements ActionListener { // class to render the game
         int cols = board[0].length;  // get number of columns
         bord.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30)); // set border of bord panel
         bord.setLayout(new GridLayout(rows, cols)); // set layout of bord panel
+        int n = 0;
         for (int i = 0; i < rows; i++) {    // for each row
             for (int j = 0; j < cols; j++) {    // for each column
                 JButton button = new JButton(board[i][j]);  // create button to render the cell
-                button.setActionCommand(i + "," + j);   // set action command of button to row,column
+                button.setActionCommand(String.valueOf(n));// set action command of button to row,column
+                n++;
                 button.addActionListener(this); // add action listener to button
                 bord.add(button);   // add button to bord panel
             }
@@ -77,22 +79,14 @@ public class Render implements ActionListener { // class to render the game
         String command = e.getActionCommand();
         if (command.equals("Send")) {
             loginHandler();
-        }
-        else if (command.equals("Tic-Tac-Toe")) {
+        } else if (command.equals("Tic-Tac-Toe")) {
             TicTacToe();
-        }
-        else if (command.equals("Challenge")) {
+        } else if (command.equals("Challenge")) {
             Challenge();
-        }
-        else if (command.equals("Exit")) {
+        } else if (command.equals("Exit")) {
             Exit();
-        }
-        else if (command.contains(",")) {
-            String[] coordinates = command.split(",");
-            int row = Integer.parseInt(coordinates[0]);
-            int col = Integer.parseInt(coordinates[1]);
-            System.out.println("row: " + row + " col: " + col);
-        }
+        } else
+            System.out.println(command);
     }
 
     private void Exit() {
