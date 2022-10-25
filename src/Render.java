@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class Render implements ActionListener { // class to render the game
+    public String player;
+    public Board board;
     JFrame frame = new JFrame("Game"); // create frame to render the game
     JPanel loginPanel = new JPanel(); // create panel to render the login screen
     JLabel askName = new JLabel("Enter your name:"); // create label to ask user for name
@@ -52,17 +54,19 @@ public class Render implements ActionListener { // class to render the game
 
     }
 
-    private void boardRender(String[][] board) {
+    private void boardRender(String[][] board, boolean turn) { // method to render the game board
         int rows = board.length; // get number of rows
         int cols = board[0].length;  // get number of columns
+        bord.removeAll(); // remove all components from bord panel
         bord.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30)); // set border of bord panel
         bord.setLayout(new GridLayout(rows, cols)); // set layout of bord panel
         int n = 0;
         for (int i = 0; i < rows; i++) {    // for each row
             for (int j = 0; j < cols; j++) {    // for each column
                 JButton button = new JButton(board[i][j]);  // create button to render the cell
-                button.setActionCommand(String.valueOf(n));// set action command of button to row,column
+                button.setActionCommand("MOVE " + n);// set action command of button to row,column
                 n++;
+                button.setEnabled(turn); // set button enabled if it is the player's turn
                 button.addActionListener(this); // add action listener to button
                 bord.add(button);   // add button to bord panel
             }
@@ -85,8 +89,17 @@ public class Render implements ActionListener { // class to render the game
             Challenge();
         } else if (command.equals("Exit")) {
             Exit();
-        } else
-            System.out.println(command);
+        } else if (command.contains("MOVE")) {
+            Connection.out.println(command);
+            board.turn = false;
+        }
+    }
+
+    public void repaintBoard() {
+        boardRender(board.GameBoard, board.turn);
+        frame.add(bord);
+        frame.revalidate();
+        frame.repaint();
     }
 
     private void Exit() {
@@ -108,8 +121,8 @@ public class Render implements ActionListener { // class to render the game
 
     private void TicTacToe() {
         Connection.out.println("subscribe tic-tac-toe");
-        Board board = new Board(3, 3);
-        boardRender(board.GameBoard);
+        board = new Board(3,3);
+        boardRender(board.GameBoard, board.turn);
         frame.remove(gameOptions);
         frame.add(bord);
         frame.setVisible(true);
@@ -120,6 +133,7 @@ public class Render implements ActionListener { // class to render the game
         try {
             String message = Connection.in.readLine();
             if (message.equals("OK")) {
+                player = username.getText();
                 frame.remove(loginPanel);
                 loginPanel.remove(exit);
                 gameOptions.add(exit);
