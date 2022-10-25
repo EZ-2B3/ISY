@@ -94,6 +94,13 @@ public class Render implements ActionListener { // class to render the game
             board.turn = false;
         }
     }
+    public void gameOver(String message) {
+        JOptionPane.showMessageDialog(frame, message);
+        frame.remove(bord);
+        frame.add(gameOptions);
+        frame.revalidate();
+        frame.repaint();
+    }
 
     public void repaintBoard() {
         boardRender(board.GameBoard, board.turn);
