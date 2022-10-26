@@ -50,7 +50,7 @@ class Listener extends Thread { // class to listen for messages from server in a
                     } else if (message.contains("SVR GAME YOURTURN")) {
                         Main.render.board.turn = true;
                         Main.render.repaintBoard();
-                    } else if (message.contains("SVR GAME WIN") || message.contains("SVR GAME TIE") || message.contains("SVR GAME LOSS")) {
+                    } else if (message.contains("SVR GAME WIN") || message.contains("SVR GAME DRAW") || message.contains("SVR GAME LOSS")) {
                         Main.render.gameOver(message);
                     } else{
                         System.out.println(message); // print message to user

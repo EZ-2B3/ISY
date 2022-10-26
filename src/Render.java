@@ -132,7 +132,8 @@ public class Render implements ActionListener { // class to render the game
         boardRender(board.GameBoard, board.turn);
         frame.remove(gameOptions);
         frame.add(bord);
-        frame.setVisible(true);
+        frame.revalidate();
+        frame.repaint();
     }
 
     private void loginHandler() {
