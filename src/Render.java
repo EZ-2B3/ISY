@@ -19,8 +19,14 @@ public class Render implements ActionListener { // class to render the game
     JPanel bord = new JPanel(); // create panel to render the game board
     public Render() { // constructor to render the game
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // set default close operation to exit the game
-        frame.setSize(300, 300); // set size of frame
+        frame.setSize(250, 250); // set size of frame
         frame.setLocationRelativeTo(null); // set location of frame to center of screen
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // set look and feel of frame to look and feel of operating system
+        } catch (Exception e) {
+            System.out.println("Error setting native LAF: " + e); // print error message to user
+        }
+        SwingUtilities.updateComponentTreeUI(frame); // update components of frame
 
         login(); // render login screen
 
