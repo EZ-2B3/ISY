@@ -7,19 +7,19 @@ import java.io.IOException;
 public class Render implements ActionListener { // class to render the game
     public String player;
     public Board board;
-    JFrame frame = new JFrame("Game"); // create frame to render the game
-    JPanel loginPanel = new JPanel(); // create panel to render the login screen
-    JLabel askName = new JLabel("Enter your name:"); // create label to ask user for name
-    JTextField username = new JTextField(20); // create text field to enter name
-    JButton sendUsername = new JButton("Send"); // create button to send name to server
-    JPanel gameOptions = new JPanel(); // create panel to render the game options
-    JButton ticTacToe = new JButton("Tic-Tac-Toe"); // create button to start Tic-Tac-Toe game
-    JButton challenge = new JButton("Challenge"); // create button to challenge another player
-    JButton exit = new JButton("Exit"); // create button to exit the game
-    JPanel bord = new JPanel(); // create panel to render the game board
+    final private JFrame frame = new JFrame("Game"); // create frame to render the game
+    final private JPanel loginPanel = new JPanel(); // create panel to render the login screen
+    final private JLabel askName = new JLabel("Enter your name:"); // create label to ask user for name
+    final private JTextField username = new JTextField(20); // create text field to enter name
+    final private JButton sendUsername = new JButton("Send"); // create button to send name to server
+    final private JPanel gameOptions = new JPanel(); // create panel to render the game options
+    final private JButton ticTacToe = new JButton("Tic-Tac-Toe"); // create button to start Tic-Tac-Toe game
+    final private JButton challenge = new JButton("Challenge"); // create button to challenge another player
+    final private JButton exit = new JButton("Exit"); // create button to exit the game
+    final private JPanel bord = new JPanel(); // create panel to render the game board
     public Render() { // constructor to render the game
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // set default close operation to exit the game
-        frame.setSize(250, 250); // set size of frame
+        frame.setSize(500, 500); // set size of frame
         frame.setLocationRelativeTo(null); // set location of frame to center of screen
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // set look and feel of frame to look and feel of operating system
@@ -71,13 +71,21 @@ public class Render implements ActionListener { // class to render the game
 //        bord.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30)); // set border of bord panel
         bord.setLayout(new GridLayout(rows, cols)); // set layout of bord panel
         int n = 0;
-        for (int i = 0; i < rows; i++) {    // for each row
+        for (String[] strings : board) {    // for each row
             for (int j = 0; j < cols; j++) {    // for each column
-                JButton button = new JButton(board[i][j]);  // create button to render the cell
+                JButton button = new JButton(strings[j]);  // create button to render the cell
                 button.setActionCommand("MOVE " + n);// set action command of button to row,column
                 n++;
-                button.setEnabled(turn); // set button enabled if it is the player's turn
-                button.addActionListener(this); // add action listener to button
+                if (strings[j].equals(" ")) {   // if the cell is empty
+                    if (turn) { // if it is the player's turn
+                        button.setEnabled(true);    // enable the button
+                        button.addActionListener(this);  // add action listener to button
+                    } else {
+                        button.setEnabled(false);   // disable button
+                    }
+                } else {  // if the cell is not empty
+                    button.setEnabled(false);   // disable button
+                }
                 bord.add(button);   // add button to bord panel
             }
         }

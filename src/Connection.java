@@ -11,12 +11,13 @@ import java.net.Socket;
  * @version 1.0
  */
 public class Connection {
-    private static String hostName = "game.bier.dev"; // host name of server
-    private static String portNumber = "7789"; // port number of server
-    Socket echoSocket; // create socket to connect to server
+    final protected Socket echoSocket; // create socket to connect to server
+    final protected String portNumber = "7789";// host name of server
+    final protected String hostName = "game.bier.dev";
 
     {
         try { // try to create socket to connect to server
+            // port number of server
             echoSocket = new Socket(hostName, Integer.parseInt(portNumber)); // create socket to connect to server
         } catch (IOException ex) { // if IOException is thrown
             throw new RuntimeException(ex); // throw RuntimeException
@@ -43,7 +44,4 @@ public class Connection {
             throw new RuntimeException(ex); // throw RuntimeException
         }
     }
-    BufferedReader stdIn = // create input stream to receive data from user
-                        new BufferedReader( // create input stream to receive data from user
-                                new InputStreamReader(System.in)); // create input stream to receive data from user
 }
