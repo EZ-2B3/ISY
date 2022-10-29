@@ -30,20 +30,22 @@ public class Render implements ActionListener { // class to render the game
 
         login(); // render login screen
 
-        gameOptions(); // render game options
-
         frame.setVisible(true); // set frame visible
     }
 
     private void gameOptions() { // method to render game options
+        frame.setTitle("Game options"); // set title of frame to game options
         ticTacToe.addActionListener(this); // add action listener to ticTacToe button
         gameOptions.add(ticTacToe); // add ticTacToe button to gameOptions panel
 
         challenge.addActionListener(this); // add action listener to challenge button
         gameOptions.add(challenge); // add challenge button to gameOptions panel
+
+        gameOptions.add(exit);
     }
 
     private void login() { // method to render login screen
+        frame.setTitle("Login");
         frame.add(loginPanel); // add loginPanel to frame
 
         loginPanel.add(askName); // add askName label to loginPanel panel
@@ -64,7 +66,9 @@ public class Render implements ActionListener { // class to render the game
         int rows = board.length; // get number of rows
         int cols = board[0].length;  // get number of columns
         bord.removeAll(); // remove all components from bord panel
-        bord.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30)); // set border of bord panel
+        // add opponent name to frame title
+        frame.setTitle("Tic-Tac-Toe - " + Game.opponent);
+//        bord.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30)); // set border of bord panel
         bord.setLayout(new GridLayout(rows, cols)); // set layout of bord panel
         int n = 0;
         for (int i = 0; i < rows; i++) {    // for each row
@@ -103,6 +107,7 @@ public class Render implements ActionListener { // class to render the game
     public void gameOver(String message) {
         JOptionPane.showMessageDialog(frame, message);
         frame.remove(bord);
+        gameOptions();
         frame.add(gameOptions);
         frame.revalidate();
         frame.repaint();
@@ -149,8 +154,7 @@ public class Render implements ActionListener { // class to render the game
             if (message.equals("OK")) {
                 player = username.getText();
                 frame.remove(loginPanel);
-                loginPanel.remove(exit);
-                gameOptions.add(exit);
+                gameOptions();
                 frame.add(gameOptions);
                 frame.repaint();
                 frame.revalidate();

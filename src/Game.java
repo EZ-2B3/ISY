@@ -1,14 +1,19 @@
 import java.io.IOException;
 
 class Game extends Thread { // class to listen for messages from server in a separate thread
+    public static String opponent; // create variable to store opponent name
     public void run() { // run method
         while (true) { // while true
             try { // try to read message from server
                 if (Connection.in.ready()) { // if message is ready to be read
                     String message = Connection.in.readLine(); // read message from server
+                    if (message.contains("SVR GAME MATCH")) {
+                        String[] split = message.split(" ");
+                        opponent = split[8].replace("\"", "").replace("}", "");
+                        Main.render.repaintBoard();
+                    }
                     if (message.contains("SVR GAME MOVE")) {
                         int moves = Main.render.board.moves++;
-                        System.out.println(moves);
                         String[] split = message.split(" ");
                         String player = split[4].replace(",", "").replace("\"", "");
                         String move = split[6].replace(",", "").replace("\"", "");
