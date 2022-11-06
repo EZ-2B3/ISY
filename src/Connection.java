@@ -4,44 +4,38 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-/**
- * Class to create connection to server
- *
- * @author Reinder Noordmans
- * @version 1.0
- */
 public class Connection {
-    final protected Socket echoSocket; // create socket to connect to server
-    final protected String portNumber = "7789";// host name of server
+    final protected Socket echoSocket;
+    final protected String portNumber = "7789";
     final protected String hostName = "game.bier.dev";
 
     {
         try { // try to create socket to connect to server
             // port number of server
-            echoSocket = new Socket(hostName, Integer.parseInt(portNumber)); // create socket to connect to server
-        } catch (IOException ex) { // if IOException is thrown
-            throw new RuntimeException(ex); // throw RuntimeException
+            echoSocket = new Socket(hostName, Integer.parseInt(portNumber));
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
-    static PrintWriter out;  // create output stream to send data to server
+    static PrintWriter out;
 
     {
         try {
-            out = new PrintWriter(echoSocket.getOutputStream(), true); // create output stream to send data to server
-        } catch (IOException ex) { // if IOException is thrown
-            throw new RuntimeException(ex); // throw RuntimeException
+            out = new PrintWriter(echoSocket.getOutputStream(), true);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
-    static BufferedReader in;  // create input stream to receive data from server
+    static BufferedReader in;
 
     {
-        try { // try to create input stream to receive data from server
-            in = new BufferedReader( // create input stream to receive data from server
-                    new InputStreamReader(echoSocket.getInputStream())); // create input stream to receive data from server
-        } catch (IOException ex) { // if IOException is thrown
-            throw new RuntimeException(ex); // throw RuntimeException
+        try {
+            in = new BufferedReader(
+                    new InputStreamReader(echoSocket.getInputStream()));
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
 }
