@@ -1,17 +1,22 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
 
-class Game { // class to listen for messages from server in a separate thread
-    private static Render render = new Render();
+class Game implements ActionListener { // class to listen for messages from server in a separate thread
+    private Render render;
     private String Opponent;
     private int Moves;
     private Board board;
     private static Connection connection = new Connection();
     private static String player;
 
-    public static void Update() {
+    public Game(){
+        this.render = new Render(this);
+    }
+
+    public void Update() {
         try {
             while (true) { // while true
                 if (connection.in.ready()) { // if message is ready to be read
@@ -28,7 +33,7 @@ class Game { // class to listen for messages from server in a separate thread
         //TODO
     }
 
-    private static void OnQuit() {
+    private void OnQuit() {
         try {
             Connection.out.println("exit");
             render.frame.setVisible(false);
@@ -56,7 +61,7 @@ class Game { // class to listen for messages from server in a separate thread
         //TODO
         }
 
-    public static void OnLogin(String username) {
+    public void OnLogin(String username) {
         player = username;
         Connection.out.println("login " + username);
         try {
@@ -77,11 +82,24 @@ class Game { // class to listen for messages from server in a separate thread
         return false;
     }
 
-    public static void OnAction(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Login")) {
             OnLogin(render.username.getText());
         } else if (e.getActionCommand().equals("Exit")) {
             OnQuit();
+        }
+
+        switch (e.getActionCommand()){
+            case "Login":
+                OnLogin(render.username.getText());
+                break;
+
+            case "Exit":
+                OnQuit();
+
+            case "SVR GAME MOVE":
+                OnMove();
+                break;
         }
 
     }

@@ -1,16 +1,18 @@
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Render implements ActionListener {
+public class Render {
     public JFrame frame = new JFrame();
     public JPanel panelLogin = new JPanel();
     public JPanel panelGameChoice = new JPanel();
     public JPanel panelBoard = new JPanel();
 
+    private ActionListener actionListener;
+
     public JTextField username = new JTextField(16);
 
-    public Render() {
+    public Render(ActionListener actionListener) {
+        this.actionListener = actionListener;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // set default close operation to exit the game
         frame.setSize(500, 500); // set size of frame
         frame.setLocationRelativeTo(null); // set location of frame to center of screen
@@ -39,10 +41,10 @@ public class Render implements ActionListener {
         panelLogin.add(askName);
 
         username.setActionCommand("Login");
-        username.addActionListener(this);
+        username.addActionListener(this.actionListener);
         panelLogin.add(username);
 
-        exit.addActionListener(this);
+        exit.addActionListener(this.actionListener);
         panelLogin.add(exit);
     }
 
@@ -51,14 +53,14 @@ public class Render implements ActionListener {
         JButton challenge = new JButton("Challenge");
         JButton exit = new JButton("Exit");
 
-        ticTacToe.addActionListener(this);
+        ticTacToe.addActionListener(this.actionListener);
         panelGameChoice.add(ticTacToe);
 
-        challenge.addActionListener(this);
+        challenge.addActionListener(this.actionListener);
         panelGameChoice.add(challenge);
 
         panelGameChoice.add(exit);
-        exit.addActionListener(this);
+        exit.addActionListener(this.actionListener);
     }
 
     public void UpdateFrame(JPanel panel) {
@@ -66,18 +68,6 @@ public class Render implements ActionListener {
         frame.revalidate();
         frame.repaint();
     }
-
-    /**
-     * Invoked when an action occurs.
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // send action to Game class to handle it
-        Game.OnAction(e);
-    }
-
 
 //    public String player;
 //    public Board board;
