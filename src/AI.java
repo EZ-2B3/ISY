@@ -1,3 +1,3 @@
-public abstract class AI {
-    public abstract String CalculateMove(Board Board, String piece);
+public interface AI {
+    public String CalculateMove(Board board, String piece);
 }
