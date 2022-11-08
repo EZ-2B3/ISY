@@ -83,12 +83,6 @@ class Game implements ActionListener { // class to listen for messages from serv
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Login")) {
-            OnLogin(render.username.getText());
-        } else if (e.getActionCommand().equals("Exit")) {
-            OnQuit();
-        }
-
         switch (e.getActionCommand()){
             case "Login":
                 OnLogin(render.username.getText());
@@ -100,6 +94,11 @@ class Game implements ActionListener { // class to listen for messages from serv
             case "SVR GAME MOVE":
                 OnMove();
                 break;
+            case "Tic-Tac-Toe":
+                //call tictactoe game
+                break;
+            //TODO add all Event calls.
+
         }
 
     }
