@@ -10,7 +10,7 @@ class Game implements ActionListener { // class to listen for messages from serv
     private int Moves;
     private Board board;
     private static Connection connection = new Connection();
-    private static String player;
+    private String player;
 
     public Game(){
         this.render = new Render(this);
@@ -62,7 +62,7 @@ class Game implements ActionListener { // class to listen for messages from serv
         }
 
     public void OnLogin(String username) {
-        player = username;
+        this.player = username;
         Connection.out.println("login " + username);
         try {
             String message = Connection.in.readLine();
