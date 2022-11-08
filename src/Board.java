@@ -6,11 +6,11 @@
 */
 public class Board { // class to create the board for the game (CLI)
 
-    final public String[][] GameBoard; // create 2D array to store the game board
+    public String[][] gameBoard; // create 2D array to store the game board
     public boolean turn = false;
     public int moves = 0;
         public Board(int rows, int cols) { // constructor to create the game board
-                GameBoard = CreateBoard(rows, cols); // create the game board
+                gameBoard = CreateBoard(rows, cols); // create the game board
         }
 
         public static String[][] CreateBoard(int rows, int columns) { // method to create the game board

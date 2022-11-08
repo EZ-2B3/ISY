@@ -122,7 +122,7 @@ public class Render implements ActionListener { // class to render the game
     }
 
     public void repaintBoard() {
-        boardRender(board.GameBoard, board.turn);
+        boardRender(board.gameBoard, board.turn);
         frame.add(bord);
         frame.revalidate();
         frame.repaint();
@@ -148,7 +148,7 @@ public class Render implements ActionListener { // class to render the game
     private void TicTacToe() {
         Connection.out.println("subscribe tic-tac-toe");
         board = new Board(3,3);
-        boardRender(board.GameBoard, board.turn);
+        boardRender(board.gameBoard, board.turn);
         frame.remove(gameOptions);
         frame.add(bord);
         frame.revalidate();

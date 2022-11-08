@@ -27,11 +27,12 @@ class Game extends Thread { // class to listen for messages from server in a sep
                             playerIcon = "O";
                         }
 
-                        Main.render.board.GameBoard[Integer.parseInt(move) / 3][Integer.parseInt(move) % 3] = playerIcon;
+                        Main.render.board.gameBoard[Integer.parseInt(move) / 3][Integer.parseInt(move) % 3] = playerIcon;
                         Main.render.repaintBoard();
                     } else if (message.contains("SVR GAME YOURTURN")) {
                         Main.render.board.turn = true;
                         Main.render.repaintBoard();
+                        //Roep AI aan
                     } else if (message.contains("SVR GAME WIN") || message.contains("SVR GAME DRAW") || message.contains("SVR GAME LOSS")) {
                         Main.render.gameOver(message);
                         //TODO: game over (win, draw and loss) messages
