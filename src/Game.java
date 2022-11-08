@@ -48,7 +48,7 @@ class Game { // class to listen for messages from server in a separate thread
         //TODO
     }
 
-    private void OnChallengeRecieve() {
+    private void OnChallengeReceive() {
         //TODO
     }
 
