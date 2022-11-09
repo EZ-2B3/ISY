@@ -1,11 +1,15 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class Render {
     public JFrame frame = new JFrame();
-    public JPanel panelLogin = new JPanel();
+    private JPanel panelLogin = new JPanel();
+    public JPanel panelAIChoice = new JPanel();
     public JPanel panelGameChoice = new JPanel();
     public JPanel panelBoard = new JPanel();
+    public JPanel panelChallenge = new JPanel();
 
     private ActionListener actionListener;
 
@@ -25,13 +29,34 @@ public class Render {
 
         frame.setVisible(true); // set frame visible
         CreateLogin();
+        CreateAIChoice();
         CreateGameChoice();
         frame.setTitle("Login"); // set title of frame
         UpdateFrame(panelLogin);
     }
 
-    private void BoardRender(String[][] board, boolean turn) {
-        //TODO
+    public void BoardRender(String[][] board, boolean turn, String opponent) {
+        int rows = board.length;
+        int cols = board[0].length;
+        panelBoard.removeAll();
+        frame.setTitle("Tic-Tac-Toe - " + opponent + " - " + (turn ? "Your turn" : "Opponent's turn"));
+        panelBoard.setLayout(new GridLayout(rows, cols));
+        int n = 0;
+        for (String[] strings : board) {
+            for (int j = 0; j < cols; j++) {
+                JButton button = new JButton(strings[j]);
+                if (!turn || !strings[j].equals(" ")) {
+                    button.setEnabled(false);
+                } else {
+                    button.setEnabled(true);
+                    button.setName(String.valueOf(n));
+                    button.setActionCommand("move");
+                    button.addActionListener(actionListener);
+                }
+                panelBoard.add(button);
+                n++;
+            }
+        }
     }
 
     private void CreateLogin() {
@@ -46,6 +71,22 @@ public class Render {
 
         exit.addActionListener(this.actionListener);
         panelLogin.add(exit);
+    }
+
+    private void CreateAIChoice() {
+        JLabel askAI = new JLabel("Do you want to play as an AI?");
+        JButton yes = new JButton("Yes");
+        JButton no = new JButton("No");
+
+        yes.setActionCommand("AIChoice");
+        yes.addActionListener(this.actionListener);
+        panelAIChoice.add(yes);
+
+        no.setActionCommand("AIChoice");
+        no.addActionListener(this.actionListener);
+        panelAIChoice.add(no);
+
+        panelAIChoice.add(askAI);
     }
 
     private void CreateGameChoice() {
@@ -63,11 +104,28 @@ public class Render {
         exit.addActionListener(this.actionListener);
     }
 
+    public void ChallengeRender(String players, String playerName) {
+        panelChallenge.removeAll();
+        frame.setTitle("Challenge");
+        String[] playerList = players.split(", ");
+        for (String player : playerList) {
+            // place the player name in a vertical list with a button to challenge them next to their name (if they are not you) on the right side of the screen
+            if (!player.equals(playerName)) {
+                JButton button = new JButton("Challenge " + player);
+                button.setActionCommand("ChallengeSend");
+                button.addActionListener(this.actionListener);
+                panelChallenge.add(button);
+            }
+        }
+    }
+
     public void UpdateFrame(JPanel panel) {
         frame.setContentPane(panel);
         frame.revalidate();
         frame.repaint();
     }
+}
+
 
 //    public String player;
 //    public Board board;
@@ -235,5 +293,4 @@ public class Render {
 //        } catch (IOException ex) {
 //            throw new RuntimeException(ex);
 //        }
-//    }
-}
+//    }}

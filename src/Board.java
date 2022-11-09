@@ -25,17 +25,24 @@ public class Board { // class to create the board for the game (CLI)
         board[rows][cols] = piece; // Veranderd de waarde van de rows en cols naar de piece
     }
 
-    public Board Copy(){
+    public Board Copy() {
         //Makes a copy of the board and returns a new instance
-        Board copy = new Board(this.rows,this.cols);
+        Board copy = new Board(this.rows, this.cols);
 
-        for (int i = 0; i<this.rows; i++){
-            for (int j = 0; j < this.cols; j++){
-                copy.changeBoard(i,j,this.board[i][j]);
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < this.cols; j++) {
+                copy.changeBoard(i, j, this.board[i][j]);
             }
         }
 
         return copy;
+    }
+
+    public void setBoard(int move, String playerIcon) {
+        int row = move / 3;
+        int col = move % 3;
+
+        board[row][col] = playerIcon;
     }
 }
 

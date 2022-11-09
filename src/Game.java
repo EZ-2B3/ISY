@@ -6,31 +6,87 @@ import java.io.IOException;
 
 class Game implements ActionListener { // class to listen for messages from server in a separate thread
     private Render render;
-    private String Opponent;
-    private int Moves;
+    private String opponent = "No opponent";
+    private int moves;
     private Board board;
-    private static Connection connection = new Connection();
+    private boolean useAI;
+    private Connection connection = new Connection();
     private String player;
+    private boolean isMyTurn = false;
+    private String players;
 
-    public Game(){
+    public Game() {
         this.render = new Render(this);
     }
 
     public void Update() {
         try {
             while (true) { // while true
-                if (connection.in.ready()) { // if message is ready to be read
-                    String message = connection.in.readLine(); // read message from server
+                if (Connection.in.ready()) { // if message is ready to be read
+                    String message = Connection.in.readLine(); // read message from server
+                    if (message.contains("SVR GAME")) {
+                        if (message.contains("MATCH")) {
+                            String[] split = message.split(" ");
+                            opponent = split[8].replace("}", "").replace("\"", "");
+                            render.BoardRender(board.getBoard(), isMyTurn, opponent);
+                            render.UpdateFrame(render.panelBoard);
+                        } else if (message.contains("YOURTURN")) {
+                            // TODO: Logica voor als het jouw beurt is
+                            isMyTurn = true;
+                            render.BoardRender(board.getBoard(), isMyTurn, opponent);
+                            render.UpdateFrame(render.panelBoard);
+                        } else if (message.contains("CHALLENGE")) {
+                            // SVR GAME CHALLENGE {CHALLENGER: "reeeed", CHALLENGENUMBER: "6", GAMETYPE: "tic-tac-toe"}
+                            String[] split = message.split(",");
+                            String challenger = split[0].replace("SVR GAME CHALLENGE {CHALLENGER: \"", "").replace("\"", "");
+                            String challengeNumber = split[1].replace(" CHALLENGENUMBER: \"", "").replace("\"", "");
+                            String gameType = split[2].replace(" GAMETYPE: \"", "").replace("\"}", "");
+                            OnChallengeReceive(challenger, challengeNumber, gameType);
+                        } else if (message.contains("MOVE")) {
+                            String[] split = message.split(" ");
+//                        String player = split[4].replace(",", "").replace("\"", ""); kan later nog wel handig zijn
+                            int move = Integer.parseInt(split[6].replace(",", "").replace("\"", ""));
+
+                            String playerIcon;
+                            if (moves % 2 == 0) {
+                                playerIcon = "X";
+                            } else {
+                                playerIcon = "O";
+                            }
+
+                            board.setBoard(move, playerIcon);
+                            moves++;
+                            render.BoardRender(board.getBoard(), isMyTurn, opponent);
+                            render.UpdateFrame(render.panelBoard);
+                        } else {
+                            System.out.println(message);
+                        }
+                    } else if (message.contains("SVR PLAYERLIST")) {
+                        String[] split = message.split("SVR PLAYERLIST ");
+                        players = split[1].replace("[", "").replace("]", "").replace("\"", "");
+                    } else {
+                        System.out.println(message);
+                    }
                 }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
-    private void OnMove() {
-        //TODO
+    private void OnMove(String buttonText) {
+        Connection.out.println("MOVE " + buttonText);
+        isMyTurn = false;
+    }
+
+    private void OnAIChoice(String command) {
+        if (command.contains("Yes")) {
+            useAI = true;
+        } else {
+            useAI = false;
+        }
+        System.out.println("AI: " + useAI);
+        render.UpdateFrame(render.panelGameChoice);
     }
 
     private void OnQuit() {
@@ -49,17 +105,51 @@ class Game implements ActionListener { // class to listen for messages from serv
         //TODO
     }
 
-    private void OnChallengeSend() {
-        //TODO
+    private void OnChallenge() {
+        Connection.out.println("get playerlist");
+        while (players == null) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        render.ChallengeRender(players, player);
+        render.UpdateFrame(render.panelChallenge);
     }
 
-    private void OnChallengeReceive() {
-        //TODO
+    private void OnChallengeSend(String opponent) {
+        players = null;
+        Connection.out.println(opponent + " tic-tac-toe");
+        board = new Board(3, 3);
+        render.BoardRender(board.getBoard(), isMyTurn, opponent);
+        render.UpdateFrame(render.panelBoard);
+    }
+
+    private void OnChallengeReceive(String challenger, String challengeNumber, String gameType) {
+        //TODO: Een popup via de frame maken met de challenge informatie en een accept en decline knop
+        int option = JOptionPane.showConfirmDialog(render.frame, challenger + " has challenged you to a game of " + gameType + "\nDo you want to play against them?", "Challenge", JOptionPane.YES_NO_OPTION);
+        // option = 0 -> yes
+        // option = 1 -> no
+
+        if (option == 0) {
+            Connection.out.println("challenge accept " + challengeNumber);
+            board = new Board(3, 3);
+            render.BoardRender(board.getBoard(), isMyTurn, challenger);
+            render.UpdateFrame(render.panelBoard);
+        } else {
+            Connection.out.println("challenge decline " + challengeNumber);
+        }
     }
 
     private void OnSubscribe(String gameType) {
-        //TODO
+        if (gameType.contains("TicTacToe")) {
+            Connection.out.println("subscribe Tic-Tac-Toe");
+            board = new Board(3, 3);
+            render.BoardRender(board.getBoard(), isMyTurn, opponent);
+            render.UpdateFrame(render.panelBoard);
         }
+    }
 
     public void OnLogin(String username) {
         this.player = username;
@@ -68,7 +158,7 @@ class Game implements ActionListener { // class to listen for messages from serv
             String message = Connection.in.readLine();
             if (message.equals("OK")) {
                 System.out.println("Login succesfull");
-                render.UpdateFrame(render.panelGameChoice);
+                render.UpdateFrame(render.panelAIChoice);
             } else {
                 JOptionPane.showMessageDialog(render.frame, message);
             }
@@ -83,7 +173,8 @@ class Game implements ActionListener { // class to listen for messages from serv
     }
 
     public void actionPerformed(ActionEvent e) {
-        switch (e.getActionCommand()){
+        String buttonText;
+        switch (e.getActionCommand()) {
             case "Login":
                 OnLogin(render.username.getText());
                 break;
@@ -91,18 +182,33 @@ class Game implements ActionListener { // class to listen for messages from serv
             case "Exit":
                 OnQuit();
 
-            case "SVR GAME MOVE":
-                OnMove();
+            case "AIChoice":
+                buttonText = ((JButton) e.getSource()).getText();
+                OnAIChoice(buttonText);
                 break;
+
+            case "Challenge":
+                OnChallenge();
+                break;
+
+            case "ChallengeSend":
+                buttonText = ((JButton) e.getSource()).getText();
+                OnChallengeSend(buttonText);
+                break;
+
+            case "move":
+                String buttonName = ((JButton) e.getSource()).getName();
+                OnMove(buttonName);
+                break;
+
             case "Tic-Tac-Toe":
-                //call tictactoe game
+                OnSubscribe("TicTacToe");
                 break;
             //TODO add all Event calls.
 
         }
 
     }
-
 
 //    public static String opponent; // create variable to store opponent name
 //    public void run() { // run method
