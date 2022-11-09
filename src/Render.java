@@ -17,6 +17,7 @@ public class Render implements ActionListener { // class to render the game
     final private JButton challenge = new JButton("Challenge"); // create button to challenge another player
     final private JButton exit = new JButton("Exit"); // create button to exit the game
     final private JPanel bord = new JPanel(); // create panel to render the game board
+    final private JButton AI = new JButton("AI");
     public Render() { // constructor to render the game
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // set default close operation to exit the game
         frame.setSize(500, 500); // set size of frame
@@ -40,6 +41,9 @@ public class Render implements ActionListener { // class to render the game
 
         challenge.addActionListener(this); // add action listener to challenge button
         gameOptions.add(challenge); // add challenge button to gameOptions panel
+
+        AI.addActionListener(this);
+        gameOptions.add(AI);
 
         gameOptions.add(exit);
     }
@@ -110,6 +114,10 @@ public class Render implements ActionListener { // class to render the game
         } else if (command.contains("MOVE")) {
             Connection.out.println(command);
             board.turn = false;
+        } else if (command.equals("AI")) {
+            Main.game.ai = true;
+            Main.game.aiTicTacToe = new AITicTacToe(Main.game.myPiece, Main.game.opponentPiece);
+            TicTacToe();
         }
     }
     public void gameOver(String message) {

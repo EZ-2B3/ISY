@@ -22,6 +22,5 @@ public class Board { // class to create the board for the game (CLI)
             }
             return board; // return the game board
         }
-
 }
 

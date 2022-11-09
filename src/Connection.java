@@ -13,7 +13,7 @@ import java.net.Socket;
 public class Connection {
     final protected Socket echoSocket; // create socket to connect to server
     final protected String portNumber = "7789";// host name of server
-    final protected String hostName = "game.bier.dev";
+    final protected String hostName = "localhost";
 
     {
         try { // try to create socket to connect to server
