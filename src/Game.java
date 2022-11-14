@@ -80,11 +80,7 @@ class Game implements ActionListener { // class to listen for messages from serv
     }
 
     private void OnAIChoice(String command) {
-        if (command.contains("Yes")) {
-            useAI = true;
-        } else {
-            useAI = false;
-        }
+        useAI = command.contains("Yes");
         System.out.println("AI: " + useAI);
         render.UpdateFrame(render.panelGameChoice);
     }
