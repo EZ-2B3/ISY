@@ -105,6 +105,7 @@ public class Render {
     }
 
     public void ChallengeRender(String players, String playerName) {
+        //TODO: een back knop toevoegen om terug te gaan naar het game choice scherm
         panelChallenge.removeAll();
         frame.setTitle("Challenge");
         String[] playerList = players.split(", ");

@@ -6,12 +6,12 @@ import java.io.IOException;
 
 class Game implements ActionListener { // class to listen for messages from server in a separate thread
     private Render render;
-    private String opponent = "No opponent";
-    private int moves;
     private Board board;
-    private boolean useAI;
     private Connection connection = new Connection();
     private String player;
+    private String opponent = "No opponent";
+    private int moves;
+    private boolean useAI;
     private boolean isMyTurn = false;
     private String players;
 
@@ -206,47 +206,4 @@ class Game implements ActionListener { // class to listen for messages from serv
 
     }
 
-//    public static String opponent; // create variable to store opponent name
-//    public void run() { // run method
-//        //noinspection InfiniteLoopStatement
-//        while (true) { // while true
-//            try { // try to read message from server
-//                if (Connection.in.ready()) { // if message is ready to be read
-//                    String message = Connection.in.readLine(); // read message from server
-//                    if (message.contains("SVR GAME MATCH")) {
-//                        String[] split = message.split(" ");
-//                        opponent = split[8].replace("\"", "").replace("}", "");
-//                        Main.render.repaintBoard();
-//                    }
-//                    if (message.contains("SVR GAME MOVE")) {
-//                        int moves = Main.render.board.moves++;
-//                        String[] split = message.split(" ");
-////                        String player = split[4].replace(",", "").replace("\"", ""); kan later nog wel handig zijn
-//                        String move = split[6].replace(",", "").replace("\"", "");
-//
-//                        String playerIcon;
-//                        if (moves % 2 == 0) {
-//                            playerIcon = "X";
-//                        } else {
-//                            playerIcon = "O";
-//                        }
-//
-//                        Main.render.board.GameBoard[Integer.parseInt(move) / 3][Integer.parseInt(move) % 3] = playerIcon;
-//                        Main.render.repaintBoard();
-//                    } else if (message.contains("SVR GAME YOURTURN")) {
-//                        Main.render.board.turn = true;
-//                        Main.render.repaintBoard();
-//                    } else if (message.contains("SVR GAME WIN") || message.contains("SVR GAME DRAW") || message.contains("SVR GAME LOSS")) {
-//                        Main.render.gameOver(message);
-//                    } else if (message == "OK") {
-//                        // do nothing
-//                    }else{
-//                        System.out.println(message); // print message to user
-//                    }
-//                }
-//            } catch (IOException ex) { // if IOException is thrown
-//                throw new RuntimeException(ex); // throw RuntimeException
-//            }
-//        }
-//    }
 }
