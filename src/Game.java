@@ -94,7 +94,7 @@ class Game implements ActionListener { // class to listen for messages from serv
         render.UpdateFrame(render.panelGameChoice);
     }
 
-    private void OnQuit() {
+    private void OnExit() {
         try {
             Connection.out.println("exit");
             render.frame.setVisible(false);
@@ -106,8 +106,27 @@ class Game implements ActionListener { // class to listen for messages from serv
         }
     }
 
-    private void OnGameOver() {
-        //TODO
+    private void OnGameOver(String result) {
+        JPopupMenu popup = new JPopupMenu();
+
+        JLabel label = new JLabel(result);
+        popup.add(label);
+
+        JMenuItem menuItem = new JMenuItem("challenge " + opponent);
+        menuItem.setActionCommand("ChallengeSend");
+        menuItem.addActionListener(this);
+        popup.add(menuItem);
+
+        JMenuItem menuItem2 = new JMenuItem("Subscribe to this gametype again");
+        menuItem2.setActionCommand("Tic-Tac-Toe");
+        menuItem2.addActionListener(this);
+        popup.add(menuItem2);
+
+        JMenuItem menuItem3 = new JMenuItem("Quit");
+        menuItem3.addActionListener(this);
+        popup.add(menuItem3);
+
+        popup.show(render.frame, render.frame.getWidth() / 2, render.frame.getHeight() / 2);
     }
 
     private void OnChallenge() {
@@ -123,16 +142,15 @@ class Game implements ActionListener { // class to listen for messages from serv
         render.UpdateFrame(render.panelChallenge);
     }
 
-    private void OnChallengeSend(String opponent) {
+    private void OnChallengeSend(String command) {
         players = null;
-        Connection.out.println(opponent + " tic-tac-toe");
+        Connection.out.println(command + " tic-tac-toe");
         board = new Board(3, 3);
-        render.BoardRender(board.getBoard(), isMyTurn, opponent);
+        render.BoardRender(board.getBoard(), isMyTurn, command);
         render.UpdateFrame(render.panelBoard);
     }
 
     private void OnChallengeReceive(String challenger, String challengeNumber, String gameType) {
-        //TODO: Een popup via de frame maken met de challenge informatie en een accept en decline knop
         int option = JOptionPane.showConfirmDialog(render.frame, challenger + " has challenged you to a game of " + gameType + "\nDo you want to play against them?", "Challenge", JOptionPane.YES_NO_OPTION);
         // option = 0 -> yes
         // option = 1 -> no
@@ -162,7 +180,7 @@ class Game implements ActionListener { // class to listen for messages from serv
         try {
             String message = Connection.in.readLine();
             if (message.equals("OK")) {
-                System.out.println("Login succesfull");
+                System.out.println("Login successful");
                 render.UpdateFrame(render.panelAIChoice);
             } else {
                 JOptionPane.showMessageDialog(render.frame, message);
@@ -172,9 +190,8 @@ class Game implements ActionListener { // class to listen for messages from serv
         }
     }
 
-    private boolean ValidateMove() {
-        //TODO
-        return false;
+    private void OnQuit() {
+        render.UpdateFrame(render.panelGameChoice);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -185,7 +202,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                 break;
 
             case "Exit":
-                OnQuit();
+                OnExit();
 
             case "AIChoice":
                 buttonText = ((JButton) e.getSource()).getText();
@@ -197,8 +214,13 @@ class Game implements ActionListener { // class to listen for messages from serv
                 break;
 
             case "ChallengeSend":
-                buttonText = ((JButton) e.getSource()).getText();
-                OnChallengeSend(buttonText);
+                if (e.getSource() instanceof JMenuItem) {
+                    JMenuItem menuItem = (JMenuItem) e.getSource();
+                    OnChallengeSend(menuItem.getText());
+                } else {
+                    buttonText = ((JButton) e.getSource()).getText();
+                    OnChallengeSend(buttonText);
+                }
                 break;
 
             case "move":
@@ -209,7 +231,10 @@ class Game implements ActionListener { // class to listen for messages from serv
             case "Tic-Tac-Toe":
                 OnSubscribe("TicTacToe");
                 break;
-            //TODO add all Event calls.
+
+            case "Quit":
+                OnQuit();
+                //TODO add all Event calls.
 
         }
 
