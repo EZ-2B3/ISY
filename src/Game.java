@@ -31,7 +31,6 @@ class Game implements ActionListener { // class to listen for messages from serv
                             render.BoardRender(board.getBoard(), isMyTurn, opponent);
                             render.UpdateFrame(render.panelBoard);
                         } else if (message.contains("YOURTURN")) {
-                            // TODO: Logica voor als het jouw beurt is
                             isMyTurn = true;
                             render.BoardRender(board.getBoard(), isMyTurn, opponent);
                             render.UpdateFrame(render.panelBoard);
@@ -58,6 +57,16 @@ class Game implements ActionListener { // class to listen for messages from serv
                             moves++;
                             render.BoardRender(board.getBoard(), isMyTurn, opponent);
                             render.UpdateFrame(render.panelBoard);
+                            // WIN DRAW LOSS
+                        } else if (message.contains("WIN")) {
+                            String result = "Gefeliciteerd, je hebt gewonnen!";
+                            OnGameOver(result);
+                        } else if (message.contains("DRAW")) {
+                            String result = "Jammer, je hebt gelijk gespeeld!";
+                            OnGameOver(result);
+                        } else if (message.contains("LOSS")) {
+                            String result = "Helaas, je hebt verloren!";
+                            OnGameOver(result);
                         } else {
                             System.out.println(message);
                         }
