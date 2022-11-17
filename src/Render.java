@@ -104,13 +104,13 @@ public class Render {
         exit.addActionListener(this.actionListener);
     }
 
-    public void ChallengeRender(String players, String playerName) {
+    public void ChallengeRender(String players) {
         panelChallenge.removeAll();
         frame.setTitle("Challenge");
         String[] playerList = players.split(", ");
         for (String player : playerList) {
             // place the player name in a vertical list with a button to challenge them next to their name (if they are not you) on the right side of the screen
-            if (!player.equals(playerName)) {
+            if (!player.equals(username.getText())) {
                 JButton button = new JButton("Challenge " + player);
                 button.setActionCommand("ChallengeSend");
                 button.addActionListener(this.actionListener);

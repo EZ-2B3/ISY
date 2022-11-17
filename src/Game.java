@@ -119,7 +119,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                 e.printStackTrace();
             }
         }
-        render.ChallengeRender(players, player);
+        render.ChallengeRender(players);
         render.UpdateFrame(render.panelChallenge);
     }
 
