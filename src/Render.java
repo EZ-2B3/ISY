@@ -124,5 +124,28 @@ public class Render {
         frame.revalidate();
         frame.repaint();
     }
+
+    public void GameOverRender(String result, String opponent) {
+        JPopupMenu popup = new JPopupMenu();
+
+        JLabel label = new JLabel(result);
+        popup.add(label);
+
+        JMenuItem menuItem = new JMenuItem("challenge " + opponent);
+        menuItem.setActionCommand("ChallengeSend");
+        menuItem.addActionListener(this.actionListener);
+        popup.add(menuItem);
+
+        JMenuItem menuItem2 = new JMenuItem("Subscribe to this gametype again");
+        menuItem2.setActionCommand("Tic-Tac-Toe");
+        menuItem2.addActionListener(this.actionListener);
+        popup.add(menuItem2);
+
+        JMenuItem menuItem3 = new JMenuItem("Quit");
+        menuItem3.addActionListener(this.actionListener);
+        popup.add(menuItem3);
+
+        popup.show(frame, frame.getWidth() / 2, frame.getHeight() / 2);
+    }
 }
 

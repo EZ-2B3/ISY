@@ -107,26 +107,7 @@ class Game implements ActionListener { // class to listen for messages from serv
     }
 
     private void OnGameOver(String result) {
-        JPopupMenu popup = new JPopupMenu();
-
-        JLabel label = new JLabel(result);
-        popup.add(label);
-
-        JMenuItem menuItem = new JMenuItem("challenge " + opponent);
-        menuItem.setActionCommand("ChallengeSend");
-        menuItem.addActionListener(this);
-        popup.add(menuItem);
-
-        JMenuItem menuItem2 = new JMenuItem("Subscribe to this gametype again");
-        menuItem2.setActionCommand("Tic-Tac-Toe");
-        menuItem2.addActionListener(this);
-        popup.add(menuItem2);
-
-        JMenuItem menuItem3 = new JMenuItem("Quit");
-        menuItem3.addActionListener(this);
-        popup.add(menuItem3);
-
-        popup.show(render.frame, render.frame.getWidth() / 2, render.frame.getHeight() / 2);
+        render.GameOverRender(result, opponent);
     }
 
     private void OnChallenge() {
