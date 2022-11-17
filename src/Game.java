@@ -88,8 +88,8 @@ class Game implements ActionListener { // class to listen for messages from serv
         isMyTurn = false;
     }
 
-    private void OnAIChoice(String command) {
-        useAI = command.contains("Yes");
+    private void OnAIChoice(String buttonText) {
+        useAI = buttonText.contains("Yes");
         System.out.println("AI: " + useAI);
         render.UpdateFrame(render.panelGameChoice);
     }
@@ -123,11 +123,11 @@ class Game implements ActionListener { // class to listen for messages from serv
         render.UpdateFrame(render.panelChallenge);
     }
 
-    private void OnChallengeSend(String command) {
+    private void OnChallengeSend(String buttonText) {
         players = null;
-        Connection.out.println(command + " tic-tac-toe");
+        Connection.out.println(buttonText + " tic-tac-toe");
         board = new Board(3, 3);
-        render.BoardRender(board.getBoard(), isMyTurn, command);
+        render.BoardRender(board.getBoard(), isMyTurn, buttonText);
         render.UpdateFrame(render.panelBoard);
     }
 
@@ -184,6 +184,7 @@ class Game implements ActionListener { // class to listen for messages from serv
 
             case "Exit":
                 OnExit();
+                break;
 
             case "AIChoice":
                 buttonText = ((JButton) e.getSource()).getText();
@@ -215,8 +216,8 @@ class Game implements ActionListener { // class to listen for messages from serv
 
             case "Quit":
                 OnQuit();
-                //TODO add all Event calls.
-
+                break;
+            //TODO add all Event calls.
         }
 
     }
