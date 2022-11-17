@@ -196,8 +196,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                 break;
 
             case "ChallengeSend":
-                if (e.getSource() instanceof JMenuItem) {
-                    JMenuItem menuItem = (JMenuItem) e.getSource();
+                if (e.getSource() instanceof JMenuItem menuItem) {
                     OnChallengeSend(menuItem.getText());
                 } else {
                     buttonText = ((JButton) e.getSource()).getText();
