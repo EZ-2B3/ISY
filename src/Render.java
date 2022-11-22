@@ -114,6 +114,11 @@ public class Render {
                 panelChallenge.add(button);
             }
         }
+        // place a button to go back to the game choice screen on the bottom of the screen and center it
+        JButton button = new JButton("Back");
+        button.setActionCommand("ChallengeBack");
+        button.addActionListener(this.actionListener);
+        panelChallenge.add(button);
     }
 
     public void UpdateFrame(JPanel panel) {
