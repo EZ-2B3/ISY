@@ -1,6 +1,6 @@
 public class Board { // class to create the board for the game (CLI)
 
-    private String[][] board;
+    private final String[][] board;
     private int rows = 0;
     private int cols = 0;
 
@@ -45,4 +45,3 @@ public class Board { // class to create the board for the game (CLI)
         board[row][col] = playerIcon;
     }
 }
-
