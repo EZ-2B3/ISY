@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 public class Render {
     public JFrame frame = new JFrame();
@@ -10,9 +9,7 @@ public class Render {
     public JPanel panelGameChoice = new JPanel();
     public JPanel panelBoard = new JPanel();
     public JPanel panelChallenge = new JPanel();
-
     private ActionListener actionListener;
-
     public JTextField username = new JTextField(16);
 
     public Render(ActionListener actionListener) {
@@ -148,4 +145,3 @@ public class Render {
         popup.show(frame, frame.getWidth() / 2, frame.getHeight() / 2);
     }
 }
-
