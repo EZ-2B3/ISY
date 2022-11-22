@@ -14,6 +14,7 @@ class Game implements ActionListener { // class to listen for messages from serv
     private boolean useAI;
     private boolean isMyTurn = false;
     private String players;
+    private AI ai;
     private String myPiece;
     private String opponentPiece;
 
@@ -33,7 +34,18 @@ class Game implements ActionListener { // class to listen for messages from serv
                             render.BoardRender(board.getBoard(), isMyTurn, opponent);
                             render.UpdateFrame(render.panelBoard);
                         } else if (message.contains("YOURTURN")) {
-                            isMyTurn = true;
+                            if (myPiece == null) {
+                                myPiece = "X";
+                                opponentPiece = "O";
+                                ai = new AITicTacToe(myPiece, opponentPiece);
+                            }
+                            if (useAI) {
+                                AITicTacToe.Move move = ai.GetBestMove(board.Copy().getBoard());
+                                String moveString = String.valueOf(move.x * board.getBoard().length + move.y);
+                                Connection.out.println("move " + moveString);
+                            } else {
+                                isMyTurn = true;
+                            }
                             render.BoardRender(board.getBoard(), isMyTurn, opponent);
                             render.UpdateFrame(render.panelBoard);
                         } else if (message.contains("CHALLENGE")) {
@@ -51,6 +63,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                             if (myPiece == null) {
                                 myPiece = "O";
                                 opponentPiece = "X";
+                                ai = new AITicTacToe(myPiece, opponentPiece);
                             }
 
                             String playerIcon;
