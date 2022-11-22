@@ -44,4 +44,16 @@ public class Board { // class to create the board for the game (CLI)
 
         board[row][col] = playerIcon;
     }
+
+    public void printBoard() {
+        System.out.println("-------------");
+        for (int i = 0; i < 3; i++) {
+            System.out.print("| ");
+            for (int j = 0; j < 3; j++) {
+                System.out.print(board[i][j] + " | ");
+            }
+            System.out.println();
+            System.out.println("-------------");
+        }
+    }
 }
