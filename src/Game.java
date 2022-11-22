@@ -88,8 +88,8 @@ class Game implements ActionListener { // class to listen for messages from serv
         isMyTurn = false;
     }
 
-    private void OnAIChoice(String command) {
-        useAI = command.contains("Yes");
+    private void OnAIChoice(String buttonText) {
+        useAI = buttonText.contains("Yes");
         System.out.println("AI: " + useAI);
         render.UpdateFrame(render.panelGameChoice);
     }
@@ -107,26 +107,7 @@ class Game implements ActionListener { // class to listen for messages from serv
     }
 
     private void OnGameOver(String result) {
-        JPopupMenu popup = new JPopupMenu();
-
-        JLabel label = new JLabel(result);
-        popup.add(label);
-
-        JMenuItem menuItem = new JMenuItem("challenge " + opponent);
-        menuItem.setActionCommand("ChallengeSend");
-        menuItem.addActionListener(this);
-        popup.add(menuItem);
-
-        JMenuItem menuItem2 = new JMenuItem("Subscribe to this gametype again");
-        menuItem2.setActionCommand("Tic-Tac-Toe");
-        menuItem2.addActionListener(this);
-        popup.add(menuItem2);
-
-        JMenuItem menuItem3 = new JMenuItem("Quit");
-        menuItem3.addActionListener(this);
-        popup.add(menuItem3);
-
-        popup.show(render.frame, render.frame.getWidth() / 2, render.frame.getHeight() / 2);
+        render.GameOverRender(result, opponent);
     }
 
     private void OnChallenge() {
@@ -138,15 +119,15 @@ class Game implements ActionListener { // class to listen for messages from serv
                 e.printStackTrace();
             }
         }
-        render.ChallengeRender(players, player);
+        render.ChallengeRender(players);
         render.UpdateFrame(render.panelChallenge);
     }
 
-    private void OnChallengeSend(String command) {
+    private void OnChallengeSend(String buttonText) {
         players = null;
-        Connection.out.println(command + " tic-tac-toe");
+        Connection.out.println(buttonText + " tic-tac-toe");
         board = new Board(3, 3);
-        render.BoardRender(board.getBoard(), isMyTurn, command);
+        render.BoardRender(board.getBoard(), isMyTurn, buttonText);
         render.UpdateFrame(render.panelBoard);
     }
 
@@ -203,6 +184,7 @@ class Game implements ActionListener { // class to listen for messages from serv
 
             case "Exit":
                 OnExit();
+                break;
 
             case "AIChoice":
                 buttonText = ((JButton) e.getSource()).getText();
@@ -214,8 +196,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                 break;
 
             case "ChallengeSend":
-                if (e.getSource() instanceof JMenuItem) {
-                    JMenuItem menuItem = (JMenuItem) e.getSource();
+                if (e.getSource() instanceof JMenuItem menuItem) {
                     OnChallengeSend(menuItem.getText());
                 } else {
                     buttonText = ((JButton) e.getSource()).getText();
@@ -234,8 +215,8 @@ class Game implements ActionListener { // class to listen for messages from serv
 
             case "Quit":
                 OnQuit();
-                //TODO add all Event calls.
-
+                break;
+            //TODO add all Event calls.
         }
 
     }

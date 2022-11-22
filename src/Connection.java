@@ -6,13 +6,13 @@ import java.net.Socket;
 
 public class Connection {
     final protected Socket echoSocket;
-    final protected String portNumber = "7789";
+    final protected int portNumber = 7789;
     final protected String hostName = "game.bier.dev";
 
     {
         try { // try to create socket to connect to server
             // port number of server
-            echoSocket = new Socket(hostName, Integer.parseInt(portNumber));
+            echoSocket = new Socket(hostName, portNumber);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

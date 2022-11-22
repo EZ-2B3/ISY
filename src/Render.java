@@ -104,13 +104,13 @@ public class Render {
         exit.addActionListener(this.actionListener);
     }
 
-    public void ChallengeRender(String players, String playerName) {
+    public void ChallengeRender(String players) {
         panelChallenge.removeAll();
         frame.setTitle("Challenge");
         String[] playerList = players.split(", ");
         for (String player : playerList) {
             // place the player name in a vertical list with a button to challenge them next to their name (if they are not you) on the right side of the screen
-            if (!player.equals(playerName)) {
+            if (!player.equals(username.getText())) {
                 JButton button = new JButton("Challenge " + player);
                 button.setActionCommand("ChallengeSend");
                 button.addActionListener(this.actionListener);
@@ -123,6 +123,29 @@ public class Render {
         frame.setContentPane(panel);
         frame.revalidate();
         frame.repaint();
+    }
+
+    public void GameOverRender(String result, String opponent) {
+        JPopupMenu popup = new JPopupMenu();
+
+        JLabel label = new JLabel(result);
+        popup.add(label);
+
+        JMenuItem menuItem = new JMenuItem("challenge " + opponent);
+        menuItem.setActionCommand("ChallengeSend");
+        menuItem.addActionListener(this.actionListener);
+        popup.add(menuItem);
+
+        JMenuItem menuItem2 = new JMenuItem("Subscribe to this gametype again");
+        menuItem2.setActionCommand("Tic-Tac-Toe");
+        menuItem2.addActionListener(this.actionListener);
+        popup.add(menuItem2);
+
+        JMenuItem menuItem3 = new JMenuItem("Quit");
+        menuItem3.addActionListener(this.actionListener);
+        popup.add(menuItem3);
+
+        popup.show(frame, frame.getWidth() / 2, frame.getHeight() / 2);
     }
 }
 
