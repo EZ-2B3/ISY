@@ -3,13 +3,13 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class Render {
+    private final JPanel panelLogin = new JPanel();
+    private final ActionListener actionListener;
     public JFrame frame = new JFrame();
-    private JPanel panelLogin = new JPanel();
     public JPanel panelAIChoice = new JPanel();
     public JPanel panelGameChoice = new JPanel();
     public JPanel panelBoard = new JPanel();
     public JPanel panelChallenge = new JPanel();
-    private ActionListener actionListener;
     public JTextField username = new JTextField(16);
 
     public Render(ActionListener actionListener) {

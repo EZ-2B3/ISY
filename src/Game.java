@@ -5,9 +5,9 @@ import java.io.IOException;
 
 
 class Game implements ActionListener { // class to listen for messages from server in a separate thread
-    private Render render;
+    private final Render render;
+    private final Connection connection = new Connection();
     private Board board;
-    private Connection connection = new Connection();
     private String player;
     private String opponent = "No opponent";
     private int moves;
