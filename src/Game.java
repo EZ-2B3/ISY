@@ -200,12 +200,12 @@ class Game implements ActionListener { // class to listen for messages from serv
 
     private void OnSubscribe(String gameType) {
         this.gameType = gameType;
-        if (gameType.contains("TicTacToe")) {
+        if (gameType.equals("TicTacToe")) {
             Connection.out.println("subscribe Tic-Tac-Toe");
             board = new Board(3, 3);
             render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType);
             render.UpdateFrame(render.panelBoard);
-        } else if (gameType.contains("Reversi")) {
+        } else if (gameType.equals("Reversi")) {
             Connection.out.println("subscribe Reversi");
             board = new Board(8, 8);
             reversi = new Reversi(board);
