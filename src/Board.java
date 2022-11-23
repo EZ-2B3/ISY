@@ -46,14 +46,19 @@ public class Board { // class to create the board for the game (CLI)
     }
 
     public void printBoard() {
-        System.out.println("-------------");
-        for (int i = 0; i < 3; i++) {
-            System.out.print("| ");
-            for (int j = 0; j < 3; j++) {
-                System.out.print(board[i][j] + " | ");
+        for (int i = 0; i < cols; i++) {
+            System.out.print("----");
+        }
+        System.out.println("-");
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                System.out.print("| " + board[i][j] + " ");
             }
-            System.out.println();
-            System.out.println("-------------");
+            System.out.println("|");
+            for (int k = 0; k < cols; k++) {
+                System.out.print("----");
+            }
+            System.out.println("-");
         }
     }
 }
