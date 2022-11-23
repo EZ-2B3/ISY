@@ -179,6 +179,11 @@ class Game implements ActionListener { // class to listen for messages from serv
             board = new Board(3, 3);
             render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType);
             render.UpdateFrame(render.panelBoard);
+        } else if (gameType.contains("Reversi")) {
+            Connection.out.println("subscribe Reversi");
+            board = new Board(8, 8);
+            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType);
+            render.UpdateFrame(render.panelBoard);
         }
     }
 
@@ -237,6 +242,10 @@ class Game implements ActionListener { // class to listen for messages from serv
 
             case "Tic-Tac-Toe":
                 OnSubscribe("TicTacToe");
+                break;
+
+            case "Reversi":
+                OnSubscribe("Reversi");
                 break;
 
             case "Quit":

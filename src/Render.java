@@ -88,11 +88,15 @@ public class Render {
 
     private void CreateGameChoice() {
         JButton ticTacToe = new JButton("Tic-Tac-Toe");
+        JButton reversi = new JButton("Reversi");
         JButton challenge = new JButton("Challenge");
         JButton exit = new JButton("Exit");
 
         ticTacToe.addActionListener(this.actionListener);
         panelGameChoice.add(ticTacToe);
+
+        reversi.addActionListener(this.actionListener);
+        panelGameChoice.add(reversi);
 
         challenge.addActionListener(this.actionListener);
         panelGameChoice.add(challenge);
