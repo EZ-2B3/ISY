@@ -40,8 +40,8 @@ class Game implements ActionListener { // class to listen for messages from serv
                                 ai = new AITicTacToe(myPiece, opponentPiece);
                             }
                             if (useAI) {
-                                AITicTacToe.Move move = ai.GetBestMove(board.Copy().getBoard());
-                                String moveString = String.valueOf(move.x * board.getBoard().length + move.y);
+                                int move = ai.GetBestMove(board.Copy().getBoard());
+                                String moveString = String.valueOf(move);
                                 Connection.out.println("move " + moveString);
                             } else {
                                 isMyTurn = true;

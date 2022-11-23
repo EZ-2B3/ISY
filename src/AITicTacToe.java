@@ -7,9 +7,10 @@ public class AITicTacToe implements AI {
         this.opponentPiece = opponentPiece;
     }
 
-    public Move GetBestMove(String[][] board) {
+    public int GetBestMove(String[][] board) {
         int bestScore = Integer.MIN_VALUE;
-        Move bestMove = new Move(-1, -1);
+        int x = 0;
+        int y = 0;
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j].equals(" ")) {
@@ -18,13 +19,13 @@ public class AITicTacToe implements AI {
                     board[i][j] = " ";
                     if (score > bestScore) {
                         bestScore = score;
-                        bestMove.x = i;
-                        bestMove.y = j;
+                        x = i;
+                        y = j;
                     }
                 }
             }
         }
-        return bestMove;
+        return x * board.length + y;
     }
 
     private int minimax(String[][] board, boolean isMaximizing) {
