@@ -21,6 +21,14 @@ public class Board { // class to create the board for the game (CLI)
         return board; // Returned het bord
     }
 
+    public int getRows() {
+        return rows; // Returned het aantal rijen
+    }
+
+    public int getCols() {
+        return cols; // Returned het aantal kolommen
+    }
+
     public void setBoard(int rows, int cols, String piece) {
         board[rows][cols] = piece; // Veranderd de waarde van de rows en cols naar de piece
     }
