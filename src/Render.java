@@ -32,11 +32,11 @@ public class Render {
         UpdateFrame(panelLogin);
     }
 
-    public void BoardRender(String[][] board, boolean turn, String opponent) {
+    public void BoardRender(String[][] board, boolean turn, String opponent, String gameType) {
         int rows = board.length;
         int cols = board[0].length;
         panelBoard.removeAll();
-        frame.setTitle("Tic-Tac-Toe - " + opponent + " - " + (turn ? "Your turn" : "Opponent's turn"));
+        frame.setTitle(gameType + " - " + opponent + " - " + (turn ? "Your turn" : "Opponent's turn"));
         panelBoard.setLayout(new GridLayout(rows, cols));
         int n = 0;
         for (String[] strings : board) {

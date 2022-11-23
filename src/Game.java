@@ -17,6 +17,7 @@ class Game implements ActionListener { // class to listen for messages from serv
     private AI ai;
     private String myPiece;
     private String opponentPiece;
+    private String gameType = "No game";
 
     public Game() {
         this.render = new Render(this);
@@ -31,7 +32,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                         if (message.contains("MATCH")) {
                             String[] split = message.split(" ");
                             opponent = split[8].replace("}", "").replace("\"", "");
-                            render.BoardRender(board.getBoard(), isMyTurn, opponent);
+                            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType);
                             render.UpdateFrame(render.panelBoard);
                         } else if (message.contains("YOURTURN")) {
                             if (myPiece == null) {
@@ -46,7 +47,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                             } else {
                                 isMyTurn = true;
                             }
-                            render.BoardRender(board.getBoard(), isMyTurn, opponent);
+                            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType);
                             render.UpdateFrame(render.panelBoard);
                         } else if (message.contains("CHALLENGE")) {
                             // SVR GAME CHALLENGE {CHALLENGER: "reeeed", CHALLENGENUMBER: "6", GAMETYPE: "tic-tac-toe"}
@@ -76,7 +77,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                             board.setBoard(move, playerIcon);
                             board.printBoard();
                             moves++;
-                            render.BoardRender(board.getBoard(), isMyTurn, opponent);
+                            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType);
                             render.UpdateFrame(render.panelBoard);
                             // WIN DRAW LOSS
                         } else if (message.contains("WIN")) {
@@ -152,7 +153,7 @@ class Game implements ActionListener { // class to listen for messages from serv
         players = null;
         Connection.out.println(buttonText + " tic-tac-toe");
         board = new Board(3, 3);
-        render.BoardRender(board.getBoard(), isMyTurn, buttonText);
+        render.BoardRender(board.getBoard(), isMyTurn, buttonText, gameType);
         render.UpdateFrame(render.panelBoard);
     }
 
@@ -164,7 +165,7 @@ class Game implements ActionListener { // class to listen for messages from serv
         if (option == 0) {
             Connection.out.println("challenge accept " + challengeNumber);
             board = new Board(3, 3);
-            render.BoardRender(board.getBoard(), isMyTurn, challenger);
+            render.BoardRender(board.getBoard(), isMyTurn, challenger, gameType);
             render.UpdateFrame(render.panelBoard);
         } else {
             Connection.out.println("challenge decline " + challengeNumber);
@@ -172,10 +173,11 @@ class Game implements ActionListener { // class to listen for messages from serv
     }
 
     private void OnSubscribe(String gameType) {
+        this.gameType = gameType;
         if (gameType.contains("TicTacToe")) {
             Connection.out.println("subscribe Tic-Tac-Toe");
             board = new Board(3, 3);
-            render.BoardRender(board.getBoard(), isMyTurn, opponent);
+            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType);
             render.UpdateFrame(render.panelBoard);
         }
     }
