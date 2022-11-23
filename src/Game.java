@@ -5,15 +5,18 @@ import java.io.IOException;
 
 
 class Game implements ActionListener { // class to listen for messages from server in a separate thread
-    private Render render;
+    private final Render render;
+    private final Connection connection = new Connection();
     private Board board;
-    private Connection connection = new Connection();
     private String player;
     private String opponent = "No opponent";
     private int moves;
     private boolean useAI;
     private boolean isMyTurn = false;
     private String players;
+    private AI ai;
+    private String myPiece;
+    private String opponentPiece;
 
     public Game() {
         this.render = new Render(this);
@@ -31,7 +34,18 @@ class Game implements ActionListener { // class to listen for messages from serv
                             render.BoardRender(board.getBoard(), isMyTurn, opponent);
                             render.UpdateFrame(render.panelBoard);
                         } else if (message.contains("YOURTURN")) {
-                            isMyTurn = true;
+                            if (myPiece == null) {
+                                myPiece = "X";
+                                opponentPiece = "O";
+                                ai = new AITicTacToe(myPiece, opponentPiece);
+                            }
+                            if (useAI) {
+                                AITicTacToe.Move move = ai.GetBestMove(board.Copy().getBoard());
+                                String moveString = String.valueOf(move.x * board.getBoard().length + move.y);
+                                Connection.out.println("move " + moveString);
+                            } else {
+                                isMyTurn = true;
+                            }
                             render.BoardRender(board.getBoard(), isMyTurn, opponent);
                             render.UpdateFrame(render.panelBoard);
                         } else if (message.contains("CHALLENGE")) {
@@ -46,6 +60,12 @@ class Game implements ActionListener { // class to listen for messages from serv
 //                        String player = split[4].replace(",", "").replace("\"", ""); kan later nog wel handig zijn
                             int move = Integer.parseInt(split[6].replace(",", "").replace("\"", ""));
 
+                            if (myPiece == null) {
+                                myPiece = "O";
+                                opponentPiece = "X";
+                                ai = new AITicTacToe(myPiece, opponentPiece);
+                            }
+
                             String playerIcon;
                             if (moves % 2 == 0) {
                                 playerIcon = "X";
@@ -54,6 +74,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                             }
 
                             board.setBoard(move, playerIcon);
+                            board.printBoard();
                             moves++;
                             render.BoardRender(board.getBoard(), isMyTurn, opponent);
                             render.UpdateFrame(render.panelBoard);
@@ -73,6 +94,8 @@ class Game implements ActionListener { // class to listen for messages from serv
                     } else if (message.contains("SVR PLAYERLIST")) {
                         String[] split = message.split("SVR PLAYERLIST ");
                         players = split[1].replace("[", "").replace("]", "").replace("\"", "");
+                    } else if (message.contains("OK")) {
+
                     } else {
                         System.out.println(message);
                     }
@@ -90,7 +113,6 @@ class Game implements ActionListener { // class to listen for messages from serv
 
     private void OnAIChoice(String buttonText) {
         useAI = buttonText.contains("Yes");
-        System.out.println("AI: " + useAI);
         render.UpdateFrame(render.panelGameChoice);
     }
 
@@ -107,6 +129,9 @@ class Game implements ActionListener { // class to listen for messages from serv
     }
 
     private void OnGameOver(String result) {
+        myPiece = null;
+        opponentPiece = null;
+        moves = 0;
         render.GameOverRender(result, opponent);
     }
 
@@ -161,7 +186,6 @@ class Game implements ActionListener { // class to listen for messages from serv
         try {
             String message = Connection.in.readLine();
             if (message.equals("OK")) {
-                System.out.println("Login successful");
                 render.UpdateFrame(render.panelAIChoice);
             } else {
                 JOptionPane.showMessageDialog(render.frame, message);
@@ -215,6 +239,10 @@ class Game implements ActionListener { // class to listen for messages from serv
 
             case "Quit":
                 OnQuit();
+                break;
+
+            case "ChallengeBack":
+                render.UpdateFrame(render.panelGameChoice);
                 break;
             //TODO add all Event calls.
         }

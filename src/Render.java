@@ -1,18 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 public class Render {
+    private final JPanel panelLogin = new JPanel();
+    private final ActionListener actionListener;
     public JFrame frame = new JFrame();
-    private JPanel panelLogin = new JPanel();
     public JPanel panelAIChoice = new JPanel();
     public JPanel panelGameChoice = new JPanel();
     public JPanel panelBoard = new JPanel();
     public JPanel panelChallenge = new JPanel();
-
-    private ActionListener actionListener;
-
     public JTextField username = new JTextField(16);
 
     public Render(ActionListener actionListener) {
@@ -117,6 +114,11 @@ public class Render {
                 panelChallenge.add(button);
             }
         }
+        // place a button to go back to the game choice screen on the bottom of the screen and center it
+        JButton button = new JButton("Back");
+        button.setActionCommand("ChallengeBack");
+        button.addActionListener(this.actionListener);
+        panelChallenge.add(button);
     }
 
     public void UpdateFrame(JPanel panel) {
@@ -148,4 +150,3 @@ public class Render {
         popup.show(frame, frame.getWidth() / 2, frame.getHeight() / 2);
     }
 }
-

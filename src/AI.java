@@ -1,3 +1,13 @@
 public interface AI {
-    public String CalculateMove(Board board, String piece);
+    Move GetBestMove(String[][] board);
+
+    class Move {
+        public int x;
+        public int y;
+
+        public Move(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
 }
