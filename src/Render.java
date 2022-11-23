@@ -42,6 +42,8 @@ public class Render {
         for (String[] strings : board) {
             for (int j = 0; j < cols; j++) {
                 JButton button = new JButton(strings[j]);
+                // set fontsize to 25 and accept emoji's
+                button.setFont(new Font("", Font.PLAIN, 25));
                 if (!turn || !strings[j].equals(" ")) {
                     button.setEnabled(false);
                 } else {

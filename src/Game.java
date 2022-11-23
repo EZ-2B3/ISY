@@ -61,17 +61,30 @@ class Game implements ActionListener { // class to listen for messages from serv
 //                        String player = split[4].replace(",", "").replace("\"", ""); kan later nog wel handig zijn
                             int move = Integer.parseInt(split[6].replace(",", "").replace("\"", ""));
 
-                            if (myPiece == null) {
-                                myPiece = "O";
-                                opponentPiece = "X";
-                                ai = new AITicTacToe(myPiece, opponentPiece);
-                            }
+                            String playerIcon = null;
+                            if (gameType.equals("TicTacToe")) {
+                                if (myPiece == null) {
+                                    myPiece = "O";
+                                    opponentPiece = "X";
+                                    ai = new AITicTacToe(myPiece, opponentPiece);
+                                }
 
-                            String playerIcon;
-                            if (moves % 2 == 0) {
-                                playerIcon = "X";
-                            } else {
-                                playerIcon = "O";
+                                if (moves % 2 == 0) {
+                                    playerIcon = "X";
+                                } else {
+                                    playerIcon = "O";
+                                }
+                            } else if (gameType.equals("Reversi")) {
+                                if (myPiece == null) {
+                                    myPiece = "⚫";
+                                    opponentPiece = "⚪";
+//                                    ai = new AIReversi(myPiece, opponentPiece);
+                                }
+                                if (moves % 2 == 0) {
+                                    playerIcon = "⚫";
+                                } else {
+                                    playerIcon = "⚪";
+                                }
                             }
 
                             board.setBoard(move, playerIcon);
