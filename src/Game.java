@@ -18,6 +18,7 @@ class Game implements ActionListener { // class to listen for messages from serv
     private String myPiece;
     private String opponentPiece;
     private String gameType = "No game";
+    private Reversi reversi;
 
     public Game() {
         this.render = new Render(this);
@@ -35,11 +36,23 @@ class Game implements ActionListener { // class to listen for messages from serv
                             render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType);
                             render.UpdateFrame(render.panelBoard);
                         } else if (message.contains("YOURTURN")) {
-                            if (myPiece == null) {
-                                myPiece = "X";
-                                opponentPiece = "O";
-                                ai = new AITicTacToe(myPiece, opponentPiece);
+                            if (gameType.equals("TicTacToe")) {
+                                if (myPiece == null) {
+                                    myPiece = "O";
+                                    opponentPiece = "X";
+                                    ai = new AITicTacToe(myPiece, opponentPiece);
+                                }
+                            } else if (gameType.equals("Reversi")) {
+                                if (myPiece == null) {
+                                    myPiece = "⚫";
+                                    opponentPiece = "⚪";
+//                                    ai = new AIReversi(myPiece, opponentPiece);
+                                }
                             }
+                            if (gameType.equals("Reversi")) {
+                                reversi.CheckValidMoves(board, myPiece);
+                            }
+
                             if (useAI) {
                                 int move = ai.GetBestMove(board.Copy().getBoard());
                                 String moveString = String.valueOf(move);
@@ -76,8 +89,8 @@ class Game implements ActionListener { // class to listen for messages from serv
                                 }
                             } else if (gameType.equals("Reversi")) {
                                 if (myPiece == null) {
-                                    myPiece = "⚫";
-                                    opponentPiece = "⚪";
+                                    myPiece = "⚪";
+                                    opponentPiece = "⚫";
 //                                    ai = new AIReversi(myPiece, opponentPiece);
                                 }
                                 if (moves % 2 == 0) {
@@ -195,6 +208,7 @@ class Game implements ActionListener { // class to listen for messages from serv
         } else if (gameType.contains("Reversi")) {
             Connection.out.println("subscribe Reversi");
             board = new Board(8, 8);
+            reversi = new Reversi(board);
             render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType);
             render.UpdateFrame(render.panelBoard);
         }
