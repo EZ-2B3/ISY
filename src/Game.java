@@ -101,7 +101,10 @@ class Game implements ActionListener { // class to listen for messages from serv
                             }
 
                             board.setBoard(move, playerIcon);
-                            board.printBoard();
+                            if (gameType.equals("Reversi")) {
+                                reversi.CheckCaptures(board, move, playerIcon);
+                            }
+//                            board.printBoard();
                             moves++;
                             render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType);
                             render.UpdateFrame(render.panelBoard);
@@ -159,6 +162,7 @@ class Game implements ActionListener { // class to listen for messages from serv
         myPiece = null;
         opponentPiece = null;
         moves = 0;
+        isMyTurn = false;
         render.GameOverRender(result, opponent);
     }
 

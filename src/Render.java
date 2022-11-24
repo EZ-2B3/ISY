@@ -134,6 +134,7 @@ public class Render {
     }
 
     public void GameOverRender(String result, String opponent) {
+        // TODO: GameType meenemen
         JPopupMenu popup = new JPopupMenu();
 
         JLabel label = new JLabel(result);
