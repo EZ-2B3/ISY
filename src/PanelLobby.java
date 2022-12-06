@@ -1,7 +1,11 @@
 import javax.swing.*;
 
 public class PanelLobby extends JPanel {
+
+    public JFrame frame = new JFrame();
     public PanelLobby() {
-        //TODO
+
+        //Set title of frame
+        frame.setTitle("Lobby");
     }
 }

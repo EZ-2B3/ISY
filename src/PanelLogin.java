@@ -5,8 +5,12 @@ import javax.swing.*;
 
 public class PanelLogin extends JPanel {
 
+    public JFrame frame = new JFrame();
     private final ActionListener actionListener;
     public PanelLogin(ActionListener actionListener) {
+
+        //Set title of frame
+        frame.setTitle("Login");
 
         //initialize actionListener
         this.actionListener = actionListener;
