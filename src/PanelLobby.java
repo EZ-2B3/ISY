@@ -23,14 +23,14 @@ public class PanelLobby extends JPanel {
         panelLobby.add(scroll);
 
         //Show players in the lobby
-        JLabel lobbyLabel = new JLabel("Players in the lobby: ");
-        JTextArea lobbyArea = new JTextArea(20, 20);
-        lobbyArea.setEditable(false);
-        JScrollPane scroll2 = new JScrollPane(lobbyArea);
-        scroll2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        scroll2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        panelLobby.add(lobbyLabel);
-        panelLobby.add(scroll2);
+//        JLabel lobbyLabel = new JLabel("Players in the lobby: ");
+//        JTextArea lobbyArea = new JTextArea(20, 20);
+//        lobbyArea.setEditable(false);
+//        JScrollPane scroll2 = new JScrollPane(lobbyArea);
+//        scroll2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+//        scroll2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+//        panelLobby.add(lobbyLabel);
+//        panelLobby.add(scroll2);
 
         //Create the refresh button
         JButton refreshButton = new JButton("Refresh");
