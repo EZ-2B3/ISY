@@ -1,10 +1,11 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class Main implements ActionListener {
 
-    public void main(String[] args) {
+    public void main(String[] args) throws IOException {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // set look and feel of frame to look and feel of operating system
         } catch (Exception e) {
@@ -14,7 +15,7 @@ public class Main implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // set default close operation to exit the game
         frame.setSize(500, 500); // set size of frame
         frame.setLocationRelativeTo(null); // set location of frame to center of screen
-        frame.add(new PanelLogin(null));
+        frame.add(new PanelLogin(this));
         frame.setVisible(true); // set frame visible
     }
 
