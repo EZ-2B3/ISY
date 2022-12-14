@@ -1,21 +1,18 @@
 public class Piece {
-    private int x;
-    private int y;
+    private int index;
     private char icon;
 
-    public Piece(int x, int y, char icon) {
-        this.x = x;
-        this.y = y;
+    public Piece(int index, char icon) {
+        this.index = index;
         this.icon = icon;
     }
 
     public void SetIcon(char icon) {
-        //TODO: functie om het icoon te veranderen
+        this.icon = icon;
     }
 
-    public int[] GetPosition() {
-        int[] position = {x, y};
-        return position;
+    public int GetIndex() {
+        return index;
     }
 
     public char GetIcon() {

@@ -1,27 +1,43 @@
 public class Board {
 
-    private Piece[] pieces;
-    private int rows;
-    private int cols;
+    private final Piece[] pieces;
+    private final int rows;
+    private final int cols;
 
     public Board(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
+
+        pieces = new Piece[rows * cols];
     }
 
     public void SetBoard(Piece piece) {
-//        TODO: Zet het stuk op het bord
+        int index = piece.GetIndex();
+
+        if (pieces[index] == null) {
+            pieces[index] = piece;
+        }
     }
 
-    public Piece[] GetBoard() {
-        //TODO: Geef het bord terug
-        return pieces;
+    public void ChangeBoard(int index, char icon) {
+        if (pieces[index] != null) {
+            pieces[index].SetIcon(icon);
+        }
     }
 
     public Board Copy() {
-        //TODO: Maak een kopie van het bord en geef deze terug
-//        Let op return hier onder doet niks nuttigs
-        return new Board(rows, cols);
+        Board board = new Board(rows, cols);
+        // voor elk piece in pieces zet het op dezelfde index op het nieuwe bord
+        for (Piece piece : pieces) {
+            if (piece != null) {
+                board.SetBoard(piece);
+            }
+        }
+        return board;
+    }
+
+    public Piece[] GetBoard() {
+        return pieces;
     }
 
     public int GetRows() {
@@ -32,5 +48,3 @@ public class Board {
         return cols;
     }
 }
-
-
