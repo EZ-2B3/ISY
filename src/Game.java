@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Dictionary;
 
 public class Game implements ActionListener {
     protected Render render = null;
@@ -82,7 +83,11 @@ public class Game implements ActionListener {
     protected void OnLogin(String username){
         this.player = username;
 
-        connection.sendMessage("login".concat(username));
+        connection.sendMessage("login ".concat(username));
+        Dictionary response = connection.receiveMessage();
+        if (response.get("Status").equals("OK")){
+            render.UpdateFrame(new PanelGameChoice(this));
+        }
     }
 
     protected void OnSubscribe(String gameType){

@@ -2,6 +2,8 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class PanelLogin extends JPanel {
 
@@ -20,11 +22,28 @@ public class PanelLogin extends JPanel {
 
         // Create the username label and field
         JLabel usernameLabel = new JLabel("Username:");
-        JTextField usernameField = new JTextField(20);
+        JTextField usernameField = new JTextField(16);
 
         // Create the login and cancel buttons
         JButton loginButton = new JButton("Login");
         JButton quitButton = new JButton("Quit");
+
+        usernameField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                loginButton.setActionCommand("Login " + usernameField.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                loginButton.setActionCommand("Login " + usernameField.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                loginButton.setActionCommand("Login " + usernameField.getText());
+            }
+        });
 
         //Adding the Buttons to the Panel
         panelLogin.add(usernameLabel);
@@ -40,5 +59,3 @@ public class PanelLogin extends JPanel {
         add(panelLogin);
     }
 }
-
-
