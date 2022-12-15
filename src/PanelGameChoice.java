@@ -44,6 +44,5 @@ public class PanelGameChoice extends JPanel {
 
         //Adding the panel to the frame
         add(panelgameChoice);
-
     }
 }
