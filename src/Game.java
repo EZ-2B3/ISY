@@ -7,7 +7,7 @@ public class Game implements ActionListener {
     protected boolean IsMyTurn = false;
     protected String player = "";
     protected String opponent = "";
-    protected Board board = null;
+    protected board board = null;
     protected Connection connection = null;
     protected boolean useAI = false;
 
@@ -88,9 +88,9 @@ public class Game implements ActionListener {
         connection.sendMessage("subscribe ".concat(gameType));
 
         if(gameType.equals("Tic-Tac-Toe")){
-            this.board = new Board(3,3);
+            this.board = new board(3,3);
         }else{
-            this.board = new Board(8,8);
+            this.board = new board(8,8);
         }
     }
 
