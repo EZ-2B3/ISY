@@ -14,6 +14,7 @@ public class Game implements ActionListener {
 
     public Game(){
         this.render = new Render(this);
+        render.UpdateFrame(new PanelLogin(this));
         this.connection = new Connection("game.bier.dev",7789);
         this.update();
     }

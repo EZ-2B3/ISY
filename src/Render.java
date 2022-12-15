@@ -14,11 +14,12 @@ public class Render {
         frame.setSize(500, 500);
         frame.setVisible(true);
         frame.setLayout(new BorderLayout());
-        frame.add(new JButton("test"), BorderLayout.NORTH);
     }
 
     public void UpdateFrame(JPanel panel) {
         currentView = panel;
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(panel);
         frame.revalidate();
         frame.repaint();
     }
