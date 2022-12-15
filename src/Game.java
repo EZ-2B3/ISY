@@ -79,14 +79,23 @@ public class Game implements ActionListener {
     }
 
     protected void OnLogin(String username){
-        
+        this.player = username;
+
+        connection.sendMessage("login".concat(username));
     }
 
     protected void OnSubscribe(String gameType){
+        connection.sendMessage("subscribe ".concat(gameType));
 
+        if(gameType.equals("Tic-Tac-Toe")){
+            this.board = new Board(3,3);
+        }else{
+            this.board = new Board(8,8);
+        }
     }
 
-    protected void OnChallengeSend(String buttonText){
+    protected void OnChallengeSend(String message){
+        connection.sendMessage("Challenge ".concat(message));
 
     }
 
@@ -95,26 +104,29 @@ public class Game implements ActionListener {
     }
 
     protected void OnChallenge(){
+        connection.sendMessage("get playerlist");
+        //TODO get playerlist and send give it to lobbypane no need to save it in game
 
     }
     protected void OnMove (String move){
-
+        connection.sendMessage("Move ".concat(move));
     }
 
     protected void OnGameOver(String result){
-
+        render.DrawGameOver(result);
     }
 
     protected void OnExit(){
-
+        connection.sendMessage("exit");
+        System.exit(0);
     }
 
     protected void OnQuit(){
-
+        //TODO Wat is on quit?
     }
 
     protected void OnAIChoice(String choice){
-
+        useAI = choice.equals("yes");
     }
 
 
