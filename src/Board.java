@@ -1,5 +1,4 @@
 public class Board {
-
     private final Piece[] pieces;
     private final int rows;
     private final int cols;
@@ -9,42 +8,33 @@ public class Board {
         this.cols = cols;
 
         pieces = new Piece[rows * cols];
-    }
-
-    public void SetBoard(Piece piece) {
-        int index = piece.GetIndex();
-
-        if (pieces[index] == null) {
-            pieces[index] = piece;
+        for (int i = 0; i < pieces.length; i++) {
+            pieces[i] = new Piece(i, ' ');
         }
     }
 
-    public void ChangeBoard(int index, char icon) {
-        if (pieces[index] != null) {
-            pieces[index].SetIcon(icon);
-        }
+    public void changeBoard(int index, char icon) {
+        pieces[index].setIcon(icon);
     }
 
-    public Board Copy() {
+    public Board copy() {
         Board board = new Board(rows, cols);
         // voor elk piece in pieces zet het op dezelfde index op het nieuwe bord
         for (Piece piece : pieces) {
-            if (piece != null) {
-                board.SetBoard(piece);
-            }
+            board.changeBoard(piece.getIndex(), piece.getIcon());
         }
         return board;
     }
 
-    public Piece[] GetBoard() {
+    public Piece[] getBoard() {
         return pieces;
     }
 
-    public int GetRows() {
+    public int getRows() {
         return rows;
     }
 
-    public int GetCols() {
+    public int getCols() {
         return cols;
     }
 }

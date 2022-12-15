@@ -7,15 +7,15 @@ public class Piece {
         this.icon = icon;
     }
 
-    public void SetIcon(char icon) {
+    public void setIcon(char icon) {
         this.icon = icon;
     }
 
-    public int GetIndex() {
+    public int getIndex() {
         return index;
     }
 
-    public char GetIcon() {
+    public char getIcon() {
         return icon;
     }
 }
