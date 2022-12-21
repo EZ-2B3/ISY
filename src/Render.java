@@ -25,6 +25,12 @@ public class Render {
     }
 
     public void DrawGameOver(String message) {
-//        TODO:
+        JPanel panelGameOver = new JPanel();
+        JLabel gameOverLabel = new JLabel(message);
+        JButton exitButton = new JButton("Exit");
+        exitButton.addActionListener(this.actionListener);
+        panelGameOver.add(gameOverLabel);
+        panelGameOver.add(exitButton);
+        UpdateFrame(panelGameOver);
     }
 }
