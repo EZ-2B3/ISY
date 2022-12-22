@@ -1,38 +1,53 @@
 import javax.swing.*;
+import java.awt.*;
+
 public class PanelBoard extends JPanel {
+    private JButton[][] board;
+    private int rows;
+    private int cols;
 
-    public PanelBoard() {
-        //Create the panel
-        JPanel panelBoard = new JPanel();
-
-        //Create the buttons
-        JButton button1 = new JButton("");
-        JButton button2 = new JButton("");
-        JButton button3 = new JButton("");
-        JButton button4 = new JButton("");
-        JButton button5 = new JButton("");
-        JButton button6 = new JButton("");
-        JButton button7 = new JButton("");
-        JButton button8 = new JButton("");
-        JButton button9 = new JButton("");
-
-        //Add the buttons to the panel
-        panelBoard.add(button1);
-        panelBoard.add(button2);
-        panelBoard.add(button3);
-        panelBoard.add(button4);
-        panelBoard.add(button5);
-        panelBoard.add(button6);
-        panelBoard.add(button7);
-        panelBoard.add(button8);
-        panelBoard.add(button9);
-
-        //Adding the panel to the frame
-        add(panelBoard);
+    public PanelBoard(Board board) {
+        this.rows = board.getRows();
+        this.cols = board.getCols();
+        this.board = new JButton[rows][cols];
+        setLayout(new GridLayout(rows, cols));
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                this.board[i][j] = new JButton();
+                this.board[i][j].setText("");
+                this.board[i][j].setFont(new Font("Arial", Font.BOLD, 50));
+                this.board[i][j].setEnabled(false);
+                add(this.board[i][j]);
+            }
+        }
     }
 
 
-    public void RedrawBoard() {
-        //TODO: Redraw the board
+    public void RedrawBoard(Board board) {
+        Piece[] pieces = board.getBoard();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (pieces[i * cols + j].getIcon() == ' ') {
+                    this.board[i][j].setEnabled(true);
+                } else {
+                    this.board[i][j].setText(String.valueOf(pieces[i * cols + j].getIcon()));
+                    this.board[i][j].setEnabled(false);
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(750, 750);
+        Board board = new Board(8, 8);
+        PanelBoard panel = new PanelBoard(board);
+        frame.add(panel);
+        frame.setVisible(true);
+        panel.RedrawBoard(board);
+        Thread.sleep(1000);
+        board.changeBoard(0, 'X');
+        panel.RedrawBoard(board);
     }
 }
