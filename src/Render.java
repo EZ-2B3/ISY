@@ -146,7 +146,7 @@ public class Render {
         popup.add(menuItem);
 
         JMenuItem menuItem2 = new JMenuItem("Subscribe to this gametype again");
-        menuItem2.setActionCommand("Tic-Tac-Toe");
+        menuItem2.setActionCommand("Reversi");
         menuItem2.addActionListener(this.actionListener);
         popup.add(menuItem2);
 

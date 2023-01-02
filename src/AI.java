@@ -1,3 +1,3 @@
 public interface AI {
-    int GetBestMove(String[][] board);
+    int GetBestMove(Board board);
 }

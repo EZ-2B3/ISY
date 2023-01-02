@@ -46,7 +46,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                                 if (myPiece == null) {
                                     myPiece = "⚫";
                                     opponentPiece = "⚪";
-//                                    ai = new AIReversi(myPiece, opponentPiece);
+                                    ai = new AIReversi(myPiece, opponentPiece, "random", reversi);
                                 }
                             }
                             if (gameType.equals("Reversi")) {
@@ -54,7 +54,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                             }
 
                             if (useAI) {
-                                int move = ai.GetBestMove(board.Copy().getBoard());
+                                int move = ai.GetBestMove(board);
                                 String moveString = String.valueOf(move);
                                 Connection.out.println("move " + moveString);
                             } else {
@@ -91,7 +91,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                                 if (myPiece == null) {
                                     myPiece = "⚪";
                                     opponentPiece = "⚫";
-//                                    ai = new AIReversi(myPiece, opponentPiece);
+                                    ai = new AIReversi(myPiece, opponentPiece, "random",reversi);
                                 }
                                 if (moves % 2 == 0) {
                                     playerIcon = "⚫";
