@@ -3,22 +3,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.nio.Buffer;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 public class Connection {
-    private Socket socket;
-    private String hostname;
-    private int port;
-
-    private PrintWriter out;
-    private BufferedReader in;
+    private Dictionary lastMessage = new Hashtable();
+    private final PrintWriter out;
+    private final BufferedReader in;
 
     public Connection(String hostname, int port) {
-        this.hostname = hostname;
-        this.port = port;
 
+        Socket socket;
         try {
             socket = new Socket(hostname, port);
         } catch (IOException e) {
@@ -39,8 +34,8 @@ public class Connection {
         }
     }
 
-    private Dictionary formatServerMessage(String message) {
-        Dictionary dictionary = new Hashtable();
+    private Dictionary<String, String> formatServerMessage(String message) {
+        Dictionary<String, String> dictionary = new Hashtable<String, String>();
 
         String[] splitMessage = message.split(" ");
         dictionary.put("Status", "Invalid");
@@ -52,26 +47,28 @@ public class Connection {
                 if (item.contains("{") || item.contains("OK")) {
                     dictionary.put("Status", "OK");
                     start = true;
-                    item = item.replace("\"", "").replace(",", "").replace(":", "").replace("{", "").replace("}", "");
-                    if (Key == null) {
-                        Key = item;
-                    } else {
-                        dictionary.put(Key, item);
-                        Key = null;
-                    }
+                    Key = getString(dictionary, Key, item);
+                } else if (item.contains("ERR")) {
+                    dictionary.put("Status", "Error");
+
                 }
             } else {
-                item = item.replace("\"", "").replace(",", "").replace(":", "").replace("{", "").replace("}", "");
-                if (Key == null) {
-                    Key = item;
-                } else {
-                    dictionary.put(Key, item);
-                    Key = null;
-                }
+                Key = getString(dictionary, Key, item);
             }
         }
-
+        System.out.println(dictionary);
         return dictionary;
+    }
+
+    private String getString(Dictionary<String, String> dictionary, String key, String item) {
+        item = item.replace("\"", "").replace(",", "").replace(":", "").replace("{", "").replace("}", "");
+        if (key == null) {
+            key = item;
+        } else {
+            dictionary.put(key, item);
+            key = null;
+        }
+        return key;
     }
 
     public void sendMessage(String message) {
@@ -79,16 +76,18 @@ public class Connection {
     }
 
     public Dictionary receiveMessage() {
-        try {
-            if (in.ready()) {
-                return formatServerMessage(in.readLine());
+        for (int i = 0; i < 10; i++) {
+            try {
+                if (in.ready()) {
+                    lastMessage = formatServerMessage(in.readLine());
+                    return lastMessage;
+                } else {
+                    Thread.sleep(10);
+                }
+            } catch (IOException | InterruptedException e) {
+                throw new RuntimeException(e);
             }
-            Dictionary dictionary = new Hashtable();
-            dictionary.put("Status", "No message");
-
-            return dictionary;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
+        return lastMessage;
     }
 }

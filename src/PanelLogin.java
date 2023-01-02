@@ -26,22 +26,25 @@ public class PanelLogin extends JPanel {
 
         // Create the login and cancel buttons
         JButton loginButton = new JButton("Login");
-        JButton quitButton = new JButton("Quit");
+        JButton exitButton = new JButton("Exit");
 
         usernameField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 loginButton.setActionCommand("Login " + usernameField.getText());
+                usernameField.setActionCommand("Login " + usernameField.getText());
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 loginButton.setActionCommand("Login " + usernameField.getText());
+                usernameField.setActionCommand("Login " + usernameField.getText());
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
                 loginButton.setActionCommand("Login " + usernameField.getText());
+                usernameField.setActionCommand("Login " + usernameField.getText());
             }
         });
 
@@ -49,11 +52,12 @@ public class PanelLogin extends JPanel {
         panelLogin.add(usernameLabel);
         panelLogin.add(usernameField);
         panelLogin.add(loginButton);
-        panelLogin.add(quitButton);
+        panelLogin.add(exitButton);
 
         //Creating actionlisteners for the buttons
         loginButton.addActionListener(this.actionListener);
-        quitButton.addActionListener(this.actionListener);
+        usernameField.addActionListener(this.actionListener);
+        exitButton.addActionListener(this.actionListener);
 
         //Adding the panel to the frame
         add(panelLogin);

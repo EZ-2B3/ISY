@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Dictionary;
@@ -8,7 +10,9 @@ public class Game implements ActionListener {
     protected boolean IsMyTurn = false;
     protected String player = "";
     protected String opponent = "";
+    protected char playerIcon = ' ';
     protected Board board = null;
+    protected JPanel panelBoard = null;
     protected Connection connection = null;
     protected boolean useAI = false;
 
@@ -17,12 +21,20 @@ public class Game implements ActionListener {
         this.render = new Render(this);
         render.UpdateFrame(new PanelLogin(this));
         this.connection = new Connection("game.bier.dev",7789);
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        connection.receiveMessage();
+        connection.receiveMessage();
         this.update();
     }
 
     public void update(){
+        Dictionary message;
         while(true){
-
+//            connection.receiveMessage();
         }
     }
 
@@ -84,19 +96,31 @@ public class Game implements ActionListener {
         this.player = username;
 
         connection.sendMessage("login ".concat(username));
+
         Dictionary response = connection.receiveMessage();
         if (response.get("Status").equals("OK")){
             render.UpdateFrame(new PanelGameChoice(this));
+        } else if (response.get("Status").equals("Error")){
+            render.Error("Invalid Username");
         }
     }
 
     protected void OnSubscribe(String gameType){
         connection.sendMessage("subscribe ".concat(gameType));
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Dictionary response = connection.receiveMessage();
 
         if(gameType.equals("Tic-Tac-Toe")){
             this.board = new Board(3,3);
-        }else{
+        } else {
             this.board = new Board(8,8);
+            this.panelBoard = new PanelBoard(board);
+            Reversi reversi = new Reversi(this);
+            reversi.handleGame();
         }
     }
 
