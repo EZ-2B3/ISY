@@ -41,10 +41,11 @@ public class AIReversi implements AI{
 
     private ArrayList<Integer> GetValidMoves(Board board) {
         ArrayList<Integer> moves = new ArrayList<>();
-        for (int i = 0; i < board.getBoard().length; i++) {
-            for (int j = 0; j < board.getBoard()[i].length; j++) {
-                if (board.getBoard()[i][j].equals(" ")) {
-                    moves.add(i * board.getBoard().length + j);
+        boolean[][] validMoves = reversi.CheckValidMoves(board, myPiece);
+        for (int i = 0; i < validMoves.length; i++) {
+            for (int j = 0; j < validMoves[i].length; j++) {
+                if (validMoves[i][j]) {
+                    moves.add(i * validMoves.length + j);
                 }
             }
         }

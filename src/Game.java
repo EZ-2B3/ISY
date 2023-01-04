@@ -33,7 +33,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                         if (message.contains("MATCH")) {
                             String[] split = message.split(" ");
                             opponent = split[8].replace("}", "").replace("\"", "");
-                            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType);
+                            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, reversi.CheckValidMoves(board, myPiece));
                             render.UpdateFrame(render.panelBoard);
                         } else if (message.contains("YOURTURN")) {
                             if (gameType.equals("TicTacToe")) {
@@ -60,7 +60,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                             } else {
                                 isMyTurn = true;
                             }
-                            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType);
+                            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, reversi.CheckValidMoves(board, myPiece));
                             render.UpdateFrame(render.panelBoard);
                         } else if (message.contains("CHALLENGE")) {
                             // SVR GAME CHALLENGE {CHALLENGER: "reeeed", CHALLENGENUMBER: "6", GAMETYPE: "tic-tac-toe"}
@@ -106,7 +106,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                             }
 //                            board.printBoard();
                             moves++;
-                            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType);
+                            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, reversi.CheckValidMoves(board, myPiece));
                             render.UpdateFrame(render.panelBoard);
                             // WIN DRAW LOSS
                         } else if (message.contains("WIN")) {
@@ -183,7 +183,7 @@ class Game implements ActionListener { // class to listen for messages from serv
         players = null;
         Connection.out.println(buttonText + " tic-tac-toe");
         board = new Board(3, 3);
-        render.BoardRender(board.getBoard(), isMyTurn, buttonText, gameType);
+        render.BoardRender(board.getBoard(), isMyTurn, buttonText, gameType, reversi.CheckValidMoves(board, myPiece));
         render.UpdateFrame(render.panelBoard);
     }
 
@@ -195,7 +195,7 @@ class Game implements ActionListener { // class to listen for messages from serv
         if (option == 0) {
             Connection.out.println("challenge accept " + challengeNumber);
             board = new Board(3, 3);
-            render.BoardRender(board.getBoard(), isMyTurn, challenger, gameType);
+            render.BoardRender(board.getBoard(), isMyTurn, challenger, gameType, reversi.CheckValidMoves(board, myPiece));
             render.UpdateFrame(render.panelBoard);
         } else {
             Connection.out.println("challenge decline " + challengeNumber);
@@ -207,13 +207,13 @@ class Game implements ActionListener { // class to listen for messages from serv
         if (gameType.equals("TicTacToe")) {
             Connection.out.println("subscribe Tic-Tac-Toe");
             board = new Board(3, 3);
-            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType);
+            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, reversi.CheckValidMoves(board, myPiece));
             render.UpdateFrame(render.panelBoard);
         } else if (gameType.equals("Reversi")) {
             Connection.out.println("subscribe Reversi");
             board = new Board(8, 8);
             reversi = new Reversi(board);
-            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType);
+            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, reversi.CheckValidMoves(board, myPiece));
             render.UpdateFrame(render.panelBoard);
         }
     }

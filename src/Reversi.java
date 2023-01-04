@@ -6,18 +6,16 @@ public class Reversi {
         board.setBoard(4, 4, "⚪");
     }
 
-    public void CheckValidMoves(Board board, String playerIcon) {
+    public boolean[][] CheckValidMoves(Board board, String playerIcon) {
+        boolean[][] validMoves = new boolean[board.getBoard().length][board.getBoard()[0].length];
         for (int i = 0; i < board.getRows(); i++) {
             for (int j = 0; j < board.getCols(); j++) {
-                if (board.getBoard()[i][j] == " " || board.getBoard()[i][j] == "") {
-                    if (CheckMove(board, i, j, playerIcon)) {
-                        board.setBoard(i, j, " ");
-                    } else {
-                        board.setBoard(i, j, "");
-                    }
+                if (board.getBoard()[i][j] == " ") {
+                    validMoves[i][j] = CheckMove(board, i, j, playerIcon);
                 }
             }
         }
+        return validMoves;
     }
 
     private boolean CheckMove(Board board, int row, int col, String playerIcon) {

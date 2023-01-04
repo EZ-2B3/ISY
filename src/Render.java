@@ -32,7 +32,7 @@ public class Render {
         UpdateFrame(panelLogin);
     }
 
-    public void BoardRender(String[][] board, boolean turn, String opponent, String gameType) {
+    public void BoardRender(String[][] board, boolean turn, String opponent, String gameType, boolean[][] validMoves) {
         int rows = board.length;
         int cols = board[0].length;
         panelBoard.removeAll();
@@ -44,14 +44,10 @@ public class Render {
                 JButton button = new JButton(strings[j]);
                 // set fontsize to 25 and accept emoji's
                 button.setFont(new Font("", Font.PLAIN, 25));
-                if (!turn || !strings[j].equals(" ")) {
-                    button.setEnabled(false);
-                } else {
-                    button.setEnabled(true);
-                    button.setName(String.valueOf(n));
-                    button.setActionCommand("move");
-                    button.addActionListener(actionListener);
-                }
+                button.setEnabled(validMoves[n / cols][n % cols]);
+                button.setName(String.valueOf(n));
+                button.addActionListener(actionListener);
+                button.setActionCommand("move");
                 panelBoard.add(button);
                 n++;
             }
