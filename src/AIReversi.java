@@ -18,13 +18,28 @@ public class AIReversi implements AI {
     }
 
     public int GetBestMove(Board board) {
+        long start = System.currentTimeMillis();
+        long end;
+        int i;
         switch (type) {
             case "minimax":
-                return GetMinimaxMove(board);
+                i = GetMinimaxMove(board);
+                end = System.currentTimeMillis();
+                System.out.println("Time taken: " + (end - start) + "ms");
+                System.out.println("Type of AI: " + type);
+                return i;
             case "alphabeta":
-                return GetAlphaBetaMove(board);
+                i = GetAlphaBetaMove(board);
+                end = System.currentTimeMillis();
+                System.out.println("Time taken: " + (end - start) + "ms");
+                System.out.println("Type of AI: " + type);
+                return i;
             default:
-                return GetAlphaBetaThreadMove(board);
+                i = GetAlphaBetaThreadMove(board);
+                end = System.currentTimeMillis();
+                System.out.println("Time taken: " + (end - start) + "ms");
+                System.out.println("Type of AI: " + type);
+                return i;
 //                return GetRandomMove(board);
         }
     }
@@ -33,10 +48,11 @@ public class AIReversi implements AI {
         int bestMove = -1;
         int bestScore = Integer.MIN_VALUE;
         ArrayList<Integer> moves = GetValidMoves(board);
+        System.out.println("Moves: " + moves.size());
         for (int move : moves) {
             Board newBoard = board.Copy();
             newBoard.setBoard(move, myPiece);
-            int score = AlphaBeta(newBoard, 0, false, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            int score = AlphaBeta(newBoard, -4, false, Integer.MIN_VALUE, Integer.MAX_VALUE);
             if (score > bestScore) {
                 bestScore = score;
                 bestMove = move;
@@ -47,6 +63,7 @@ public class AIReversi implements AI {
 
     private int GetAlphaBetaThreadMove(Board board) {
         ArrayList<Integer> moves = GetValidMoves(board);
+        System.out.println("Moves: " + moves.size());
         if (moves.size() == 1) {
             return moves.get(0);
         } else if (moves.size() == 0) {
@@ -78,10 +95,8 @@ public class AIReversi implements AI {
             e.printStackTrace();
         }
         if (bestMove[0] == -1) {
-            System.out.println("No move found");
             return GetRandomMove(board);
         }
-        System.out.println("Best move: " + bestMove[0]);
         return bestMove[0];
     }
 
@@ -251,12 +266,9 @@ public class AIReversi implements AI {
     private int GetRandomMove(Board board) {
         ArrayList<Integer> moves = GetValidMoves(board);
         if (moves.size() == 0) {
-            System.out.println("No moves available");
         }
         int randomIndex = (int) (Math.random() * moves.size());
-        Integer integer = moves.get(randomIndex);
-        System.out.println("Random move: " + integer);
-        return integer;
+        return moves.get(randomIndex);
     }
 
     private ArrayList<Integer> GetValidMoves(Board board) {
