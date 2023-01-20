@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 class Game implements ActionListener { // class to listen for messages from server in a separate thread
@@ -19,6 +21,13 @@ class Game implements ActionListener { // class to listen for messages from serv
     private String opponentPiece;
     private String gameType = "No game";
     private Reversi reversi;
+    private List dataSet = new ArrayList<String[]>();
+    private String winner;
+    private int movesEvaluated;
+    private int movesPlayed;
+    private int gamesPlayed = 0;
+
+
 
     public Game() {
         this.render = new Render(this);
@@ -36,6 +45,8 @@ class Game implements ActionListener { // class to listen for messages from serv
                             render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType));
                             render.UpdateFrame(render.panelBoard);
                         } else if (message.contains("YOURTURN")) {
+                            isMyTurn = true;
+                            System.out.println(message);
                             if (gameType.equals("TicTacToe")) {
                                 if (myPiece == null) {
                                     myPiece = "O";
@@ -54,15 +65,22 @@ class Game implements ActionListener { // class to listen for messages from serv
 
                             if (useAI) {
                                 int move = ai.GetBestMove(board);
+                                movesEvaluated = movesEvaluated + ai.GetTotalMoves();
+                                movesPlayed++;
                                 if (move == -1) {
                                     System.out.println("No valid moves");
+
                                 } else {
                                     String moveString = String.valueOf(move);
                                     Connection.out.println("move " + moveString);
                                 }
-                            } else {
+                            }
+
+                            else {
                                 isMyTurn = true;
                             }
+
+
 
                             render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType));
                             render.UpdateFrame(render.panelBoard);
@@ -74,6 +92,8 @@ class Game implements ActionListener { // class to listen for messages from serv
                             String gameType = split[2].replace(" GAMETYPE: \"", "").replace("\"}", "");
                             OnChallengeReceive(challenger, challengeNumber, gameType);
                         } else if (message.contains("MOVE")) {
+                            System.out.println("Moves played: " + movesPlayed);
+                            System.out.println(message);
                             String[] split = message.split(" ");
 //                        String player = split[4].replace(",", "").replace("\"", ""); kan later nog wel handig zijn
                             int move = Integer.parseInt(split[6].replace(",", "").replace("\"", ""));
@@ -97,11 +117,13 @@ class Game implements ActionListener { // class to listen for messages from serv
                                     opponentPiece = "⚫";
                                     ai = new AIReversi(myPiece, opponentPiece, player, reversi);
                                 }
-                                if (moves % 2 == 0) {
-                                    playerIcon = "⚫";
+                                if (message.contains(player)) {
+                                    playerIcon = myPiece;
                                 } else {
-                                    playerIcon = "⚪";
+                                    playerIcon = opponentPiece;
                                 }
+
+
                             }
 
                             board.setBoard(move, playerIcon);
@@ -115,12 +137,15 @@ class Game implements ActionListener { // class to listen for messages from serv
                             // WIN DRAW LOSS
                         } else if (message.contains("WIN")) {
                             String result = "Gefeliciteerd, je hebt gewonnen!";
+                            winner = "WIN";
                             OnGameOver(result);
                         } else if (message.contains("DRAW")) {
                             String result = "Jammer, je hebt gelijk gespeeld!";
+                            winner = "DRAW";
                             OnGameOver(result);
                         } else if (message.contains("LOSS")) {
                             String result = "Helaas, je hebt verloren!";
+                            winner = "LOSS";
                             OnGameOver(result);
                         } else {
                             System.out.println(message);
@@ -163,11 +188,26 @@ class Game implements ActionListener { // class to listen for messages from serv
     }
 
     private void OnGameOver(String result) {
+        String depth = CalculateAverageDepth();
+        String playerPieces = Integer.toString(ai.GetMyPieces());
+        String opponentPieces = Integer.toString(ai.GetOpponentPieces());
+
+        dataSet.add(new String[] {winner, depth, playerPieces, opponentPieces});
+
         myPiece = null;
         opponentPiece = null;
         moves = 0;
         isMyTurn = false;
-        render.GameOverRender(result, opponent);
+
+        if(gamesPlayed > 25) {
+            OnQuit();
+            OnExit();
+        }
+        else {
+            OnSubscribe("Reversi");
+            gamesPlayed++;
+        }
+        //render.GameOverRender(result, opponent);
     }
 
     private void OnChallenge() {
@@ -238,6 +278,8 @@ class Game implements ActionListener { // class to listen for messages from serv
     }
 
     private void OnQuit() {
+        Results.WriteToCSV(dataSet);
+
         render.UpdateFrame(render.panelGameChoice);
     }
 
@@ -293,6 +335,17 @@ class Game implements ActionListener { // class to listen for messages from serv
             //TODO add all Event calls.
         }
 
+    }
+
+    private String CalculateAverageDepth() {
+        float evaluated = movesEvaluated;
+        float played = movesPlayed;
+        float avg = evaluated / played;
+        String avgString = Float.toString(avg);
+        movesPlayed = 0;
+        movesEvaluated = 0;
+
+        return avgString;
     }
 
     public void setMyTurn(boolean myTurn) {
