@@ -92,8 +92,6 @@ class Game implements ActionListener { // class to listen for messages from serv
                             String gameType = split[2].replace(" GAMETYPE: \"", "").replace("\"}", "");
                             OnChallengeReceive(challenger, challengeNumber, gameType);
                         } else if (message.contains("MOVE")) {
-                            System.out.println("Moves played: " + movesPlayed);
-                            System.out.println(message);
                             String[] split = message.split(" ");
 //                        String player = split[4].replace(",", "").replace("\"", ""); kan later nog wel handig zijn
                             int move = Integer.parseInt(split[6].replace(",", "").replace("\"", ""));
@@ -199,7 +197,7 @@ class Game implements ActionListener { // class to listen for messages from serv
         moves = 0;
         isMyTurn = false;
 
-        if(gamesPlayed > 25) {
+        if(gamesPlayed > 100) {
             OnQuit();
             OnExit();
         }
