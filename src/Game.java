@@ -74,6 +74,7 @@ class Game implements ActionListener { // class to listen for messages from serv
                                     System.out.println("No valid moves");
 
                                 } else {
+                                    String moveString = String.valueOf(move);
                                     Connection.out.println("move " + moveString);
                                 }
                             }
