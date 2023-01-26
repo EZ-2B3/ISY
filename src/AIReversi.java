@@ -10,6 +10,8 @@ public class AIReversi implements AI {
     private String type = "";
     private final Reversi reversi;
     private int totalMoves = 0;
+    private int myPieces;
+    private int opponentPieces;
 
     public AIReversi(String myPiece, String opponentPiece, String type, Reversi reversi) {
         this.myPiece = myPiece;
@@ -25,12 +27,13 @@ public class AIReversi implements AI {
         System.out.println("--------------------");
         switch (type) {
             case "minimax" -> {
+                totalMoves = 0;
                 i = GetMinimaxMove(board);
                 end = System.currentTimeMillis();
                 System.out.println("Time taken: " + (end - start) + "ms");
                 System.out.println("Type of AI: " + type);
                 System.out.println("Total moves: " + totalMoves);
-                totalMoves = 0;
+                //totalMoves = 0;
                 return i;
             }
             case "alphabeta" -> {
@@ -39,7 +42,7 @@ public class AIReversi implements AI {
                 System.out.println("Time taken: " + (end - start) + "ms");
                 System.out.println("Type of AI: " + type);
                 System.out.println("Total moves: " + totalMoves);
-                totalMoves = 0;
+                //totalMoves = 0;
                 return i;
             }
             default -> {
@@ -48,7 +51,7 @@ public class AIReversi implements AI {
                 System.out.println("Time taken: " + (end - start) + "ms");
                 System.out.println("Type of AI: " + type);
                 System.out.println("Total moves: " + totalMoves);
-                totalMoves = 0;
+                //totalMoves = 0;
                 return i;
             }
 //                return GetRandomMove(board);
@@ -202,8 +205,8 @@ public class AIReversi implements AI {
         }
     }
     private int EvaluateBoard(Board board) {
-        int myPieces = 0;
-        int opponentPieces = 0;
+        myPieces = 0;
+        opponentPieces = 0;
         int myMoves = 0;
         int opponentMoves = 0;
         int myCornerControl = 0;
@@ -301,4 +304,18 @@ public class AIReversi implements AI {
         }
         return moves;
     }
+
+    public int GetTotalMoves() {
+        return totalMoves;
+    }
+
+    public int GetMyPieces() {
+        return myPieces;
+    }
+
+    public int GetOpponentPieces() {
+        return opponentPieces;
+    }
+
+
 }

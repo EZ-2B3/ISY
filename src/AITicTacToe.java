@@ -94,4 +94,16 @@ public class AITicTacToe implements AI {
         }
         return "tie";
     }
+
+    public int GetTotalMoves(){
+        return 0;
+    }
+
+    public int GetMyPieces(){
+        return 0;
+    }
+
+    public int GetOpponentPieces(){
+        return 0;
+    }
 }
