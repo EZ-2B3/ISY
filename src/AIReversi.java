@@ -37,6 +37,7 @@ public class AIReversi implements AI {
                 return i;
             }
             case "alphabeta" -> {
+                totalMoves = 0;
                 i = GetAlphaBetaMove(board, start);
                 end = System.currentTimeMillis();
                 System.out.println("Time taken: " + (end - start) + "ms");
@@ -46,6 +47,7 @@ public class AIReversi implements AI {
                 return i;
             }
             default -> {
+                totalMoves = 0;
                 i = GetAlphaBetaThreadMove(board, start);
                 end = System.currentTimeMillis();
                 System.out.println("Time taken: " + (end - start) + "ms");
