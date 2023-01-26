@@ -192,8 +192,15 @@ class Game implements ActionListener { // class to listen for messages from serv
         String depth = CalculateAverageDepth();
         String playerPieces = Integer.toString(ai.GetMyPieces());
         String opponentPieces = Integer.toString(ai.GetOpponentPieces());
+        String myPieceString;
+        if(myPiece == "⚪") {
+            myPieceString = "White";
+        }
+        else {
+            myPieceString = "Black";
+        }
 
-        dataSet.add(new String[] {winner, depth, playerPieces, opponentPieces});
+        dataSet.add(new String[] {winner, myPieceString, depth, playerPieces, opponentPieces});
 
         myPiece = null;
         opponentPiece = null;
