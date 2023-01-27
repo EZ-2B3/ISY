@@ -3,7 +3,7 @@ public interface AI {
 
     int GetTotalMoves();
 
-    int GetMyPieces();
+    int GetMyPieces(Board board);
 
-    int GetOpponentPieces();
+    int GetOpponentPieces(Board board);
 }

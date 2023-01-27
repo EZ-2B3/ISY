@@ -22,41 +22,28 @@ public class AIReversi implements AI {
 
     public int GetBestMove(Board board) {
         long start = System.currentTimeMillis();
-        long end;
         int i;
-        System.out.println("--------------------");
         switch (type) {
-            case "minimax" -> {
+            case "mm" -> {
                 totalMoves = 0;
                 i = GetMinimaxMove(board, start);
-                end = System.currentTimeMillis();
-                System.out.println("Time taken: " + (end - start) + "ms");
-                System.out.println("Type of AI: " + type);
                 System.out.println("Total moves: " + totalMoves);
-                //totalMoves = 0;
                 return i;
             }
-            case "alphabeta" -> {
+            case "ab" -> {
                 totalMoves = 0;
                 i = GetAlphaBetaMove(board, start);
-                end = System.currentTimeMillis();
-                System.out.println("Time taken: " + (end - start) + "ms");
-                System.out.println("Type of AI: " + type);
                 System.out.println("Total moves: " + totalMoves);
-                //totalMoves = 0;
+                return i;
+            } case "abt" -> {
+                totalMoves = 0;
+                i = GetAlphaBetaThreadMove(board, start);
+                System.out.println("Total moves: " + totalMoves);
                 return i;
             }
             default -> {
-                totalMoves = 0;
-                i = GetAlphaBetaThreadMove(board, start);
-                end = System.currentTimeMillis();
-                System.out.println("Time taken: " + (end - start) + "ms");
-                System.out.println("Type of AI: " + type);
-                System.out.println("Total moves: " + totalMoves);
-                //totalMoves = 0;
-                return i;
+                return GetRandomMove(board);
             }
-//                return GetRandomMove(board);
         }
     }
 
@@ -64,7 +51,6 @@ public class AIReversi implements AI {
         int bestMove = -1;
         int bestScore = Integer.MIN_VALUE;
         ArrayList<Integer> moves = GetValidMoves(board);
-        System.out.println("Moves: " + moves.size());
         totalMoves += moves.size();
         for (int move : moves) {
             Board newBoard = board.Copy();
@@ -80,7 +66,6 @@ public class AIReversi implements AI {
 
     private int GetAlphaBetaThreadMove(Board board, long start) {
         ArrayList<Integer> moves = GetValidMoves(board);
-        System.out.println("Moves: " + moves.size());
         totalMoves += moves.size();
         if (moves.size() == 1) {
             return moves.get(0);
@@ -121,7 +106,6 @@ public class AIReversi implements AI {
 
     private int GetMinimaxMove(Board board, long start) {
         ArrayList<Integer> moves = GetValidMoves(board);
-        System.out.println("Moves: " + moves.size());
         totalMoves += moves.size();
         int bestMove = -1;
         int bestScore = -1000;
@@ -129,7 +113,7 @@ public class AIReversi implements AI {
             Board newBoard = board.Copy();
             newBoard.setBoard(move, myPiece);
             reversi.CheckCaptures(newBoard, move, myPiece);
-            int score = MiniMax(newBoard, 5, false, start);
+            int score = MiniMax(newBoard, -1, false, start);
             if (score > bestScore) {
                 bestScore = score;
                 bestMove = move;
@@ -139,7 +123,7 @@ public class AIReversi implements AI {
     }
 
     private int MiniMax(Board board, int depth, boolean isMaximizing, long start) {
-        if (depth == 0 || System.currentTimeMillis() - start > 4500) {
+        if (depth == 0 || System.currentTimeMillis() - start > 9000) {
             return EvaluateBoard(board);
         }
         ArrayList<Integer> moves = GetValidMoves(board);
@@ -169,7 +153,7 @@ public class AIReversi implements AI {
     }
 
     private int AlphaBeta(Board board, int depth, boolean isMaximizing, int alpha, int beta, long start) {
-        if (depth == 0 || System.currentTimeMillis() - start > 4500) {
+        if (depth == 0 || System.currentTimeMillis() - start > 9000) {
             return EvaluateBoard(board);
         }
         ArrayList<Integer> moves = GetValidMoves(board);
@@ -311,11 +295,27 @@ public class AIReversi implements AI {
         return totalMoves;
     }
 
-    public int GetMyPieces() {
+    public int GetMyPieces(Board board) {
+        myPieces = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board.getBoard()[i][j].equals(myPiece)) {
+                    myPieces++;
+                }
+            }
+        }
         return myPieces;
     }
 
-    public int GetOpponentPieces() {
+    public int GetOpponentPieces(Board board) {
+        opponentPieces = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board.getBoard()[i][j].equals(opponentPiece)) {
+                    opponentPieces++;
+                }
+            }
+        }
         return opponentPieces;
     }
 

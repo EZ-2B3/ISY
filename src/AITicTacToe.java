@@ -99,11 +99,11 @@ public class AITicTacToe implements AI {
         return 0;
     }
 
-    public int GetMyPieces(){
+    public int GetMyPieces(Board board){
         return 0;
     }
 
-    public int GetOpponentPieces(){
+    public int GetOpponentPieces(Board board){
         return 0;
     }
 }
