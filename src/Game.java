@@ -41,64 +41,67 @@ class Game implements ActionListener { // class to listen for messages from serv
                 if (Connection.in.ready()) { // if message is ready to be read
                     String message = Connection.in.readLine(); // read message from server\
                     System.out.println("Received: " + message); // print message to console
-                    if (message.contains("SVR GAME")) {
-                        if (message.contains("MATCH")) {
+                    if (message.contains("SVR GAME")) { // If message about the game
+                        if (message.contains("MATCH")) { // If SVR GAME Match - set opponent
                             String[] split = message.split(" ");
                             opponent = split[8].replace("}", "").replace("\"", "");
                             render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType));
                             render.UpdateFrame(render.panelBoard);
-                        } else if (message.contains("YOURTURN")) {
+                        } else if (message.contains("YOURTURN")) { // SVR GAME YOURTURN - Deze computer is aan de beurt
                             isMyTurn = true;
                             System.out.println(message);
-                            if (gameType.equals("TicTacToe")) {
-                                if (myPiece == null) {
+                            if (gameType.equals("TicTacToe")) { // If playing tictactoe
+                                if (myPiece == null) { // assign piece if null
                                     myPiece = "O";
                                     opponentPiece = "X";
-                                    ai = new AITicTacToe(myPiece, opponentPiece);
+                                    ai = new AITicTacToe(myPiece, opponentPiece); // set TicTacToe AI
                                 }
-                            } else if (gameType.equals("Reversi")) {
-                                if (myPiece == null) {
+                            } else if (gameType.equals("Reversi")) { // If playing reversi
+                                if (myPiece == null) { // assign piece if null
                                     myPiece = "⚫";
                                     opponentPiece = "⚪";
-                                    ai = new AIReversi(myPiece, opponentPiece, player, reversi);
+                                    ai = new AIReversi(myPiece, opponentPiece, player, reversi); // set Reversi AI
                                 }
                             }
-
+                            // Check valid moves for the game type - obsolete call?
                             board.CheckValidMoves(myPiece, gameType);
 
-                            if (useAI) {
+                            if (useAI) { // If using AI get the best move
                                 int move = ai.GetBestMove(board);
                                 movesEvaluated = movesEvaluated + ai.GetTotalMoves();
                                 movesPlayed++;
-                                if (move == -1) {
+                                if (move == -1) { // What to do when no valid moves left
                                     System.out.println("No valid moves");
 
-                                } else {
+                                } else { // Send Valid move to the server
                                     String moveString = String.valueOf(move);
                                     Connection.out.println("move " + moveString);
                                 }
                             }
 
                             else {
-                                isMyTurn = true;
+                                isMyTurn = true;// obsolete?
                             }
 
 
-
+                            // Update renderer
                             render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType));
                             render.UpdateFrame(render.panelBoard);
-                        } else if (message.contains("CHALLENGE")) {
+                            // End of SVR GAME YOURTURN
+                            // Missing isMyTurn = false;?
+                        } else if (message.contains("CHALLENGE")) { // SVR GAME CHALLENGE - Received challenge from other
                             // SVR GAME CHALLENGE {CHALLENGER: "reeeed", CHALLENGENUMBER: "6", GAMETYPE: "tic-tac-toe"}
                             String[] split = message.split(",");
-                            String challenger = split[0].replace("SVR GAME CHALLENGE {CHALLENGER: \"", "").replace("\"", "");
-                            String challengeNumber = split[1].replace(" CHALLENGENUMBER: \"", "").replace("\"", "");
-                            String gameType = split[2].replace(" GAMETYPE: \"", "").replace("\"}", "");
-                            OnChallengeReceive(challenger, challengeNumber, gameType);
-                        } else if (message.contains("MOVE")) {
+                            String challenger = split[0].replace("SVR GAME CHALLENGE {CHALLENGER: \"", "").replace("\"", ""); // get challenger
+                            String challengeNumber = split[1].replace(" CHALLENGENUMBER: \"", "").replace("\"", ""); // get challenge number
+                            String gameType = split[2].replace(" GAMETYPE: \"", "").replace("\"}", ""); // Get gametype
+                            OnChallengeReceive(challenger, challengeNumber, gameType); // Call for challenge received
+                        } else if (message.contains("MOVE")) { // SVR GAME MOVE -
                             String[] split = message.split(" ");
 //                        String player = split[4].replace(",", "").replace("\"", ""); kan later nog wel handig zijn
-                            int move = Integer.parseInt(split[6].replace(",", "").replace("\"", ""));
+                            int move = Integer.parseInt(split[6].replace(",", "").replace("\"", ""));// Get the move made
 
+                            // Set all icons
                             String playerIcon = null;
                             if (gameType.equals("TicTacToe")) {
                                 if (myPiece == null) {
@@ -127,13 +130,13 @@ class Game implements ActionListener { // class to listen for messages from serv
 
                             }
 
-                            board.setBoard(move, playerIcon);
+                            board.setBoard(move, playerIcon); // Put move on board
                             if (gameType.equals("Reversi")) {
-                                reversi.CheckCaptures(board, move, playerIcon);
+                                reversi.CheckCaptures(board, move, playerIcon); // Check for captures in reversi
                             }
 //                            board.printBoard();
                             moves++;
-                            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType));
+                            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType)); // Update renderer
                             render.UpdateFrame(render.panelBoard);
                             // WIN DRAW LOSS
                         } else if (message.contains("WIN")) {
@@ -151,11 +154,11 @@ class Game implements ActionListener { // class to listen for messages from serv
                         } else {
                             System.out.println(message);
                         }
-                    } else if (message.contains("SVR PLAYERLIST")) {
+                    } else if (message.contains("SVR PLAYERLIST")) { // Get the playerlist
                         String[] split = message.split("SVR PLAYERLIST ");
                         players = split[1].replace("[", "").replace("]", "").replace("\"", "");
                     } else if (message.contains("OK")) {
-
+                    // empty if on OK
                     } else {
                         System.out.println(message);
                     }
