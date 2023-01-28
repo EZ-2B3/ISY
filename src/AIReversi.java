@@ -52,10 +52,12 @@ public class AIReversi implements AI {
         int bestScore = Integer.MIN_VALUE;
         ArrayList<Integer> moves = GetValidMoves(board);
         totalMoves += moves.size();
+        int timePerMove = 9000/totalMoves;
         for (int move : moves) {
+            int end = timePerMove * (moves.indexOf(move) + 1);
             Board newBoard = board.Copy();
             newBoard.setBoard(move, myPiece);
-            int score = AlphaBeta(newBoard, -1, false, Integer.MIN_VALUE, Integer.MAX_VALUE, start);
+            int score = AlphaBeta(newBoard, -1, false, Integer.MIN_VALUE, Integer.MAX_VALUE, start, end);
             if (score > bestScore) {
                 bestScore = score;
                 bestMove = move;
@@ -82,7 +84,7 @@ public class AIReversi implements AI {
                 public void run() {
                     Board newBoard = board.Copy();
                     newBoard.setBoard(move, myPiece);
-                    int score = AlphaBeta(newBoard, -1, false, Integer.MIN_VALUE, Integer.MAX_VALUE, start);
+                    int score = AlphaBeta(newBoard, -1, false, Integer.MIN_VALUE, Integer.MAX_VALUE, start, 9000);
                     if (score > bestScore[0]) {
                         bestScore[0] = score;
                         bestMove[0] = move;
@@ -109,11 +111,13 @@ public class AIReversi implements AI {
         totalMoves += moves.size();
         int bestMove = -1;
         int bestScore = -1000;
+        int timePerMove = 9000/totalMoves;
         for (int move : moves) {
+            int end = timePerMove * (moves.indexOf(move) + 1);
             Board newBoard = board.Copy();
             newBoard.setBoard(move, myPiece);
             reversi.CheckCaptures(newBoard, move, myPiece);
-            int score = MiniMax(newBoard, -1, false, start);
+            int score = MiniMax(newBoard, -1, false, start, end);
             if (score > bestScore) {
                 bestScore = score;
                 bestMove = move;
@@ -122,8 +126,8 @@ public class AIReversi implements AI {
         return bestMove;
     }
 
-    private int MiniMax(Board board, int depth, boolean isMaximizing, long start) {
-        if (depth == 0 || System.currentTimeMillis() - start > 9000) {
+    private int MiniMax(Board board, int depth, boolean isMaximizing, long start, int end) {
+        if (depth == 0 || System.currentTimeMillis() - start > end) {
             return EvaluateBoard(board);
         }
         ArrayList<Integer> moves = GetValidMoves(board);
@@ -137,7 +141,7 @@ public class AIReversi implements AI {
                 Board newBoard = board.Copy();
                 newBoard.setBoard(move, myPiece);
                 reversi.CheckCaptures(newBoard, move, myPiece);
-                score = Math.max(score, MiniMax(newBoard, depth - 1, false, start));
+                score = Math.max(score, MiniMax(newBoard, depth - 1, false, start, end));
             }
             return score;
         } else {
@@ -146,14 +150,14 @@ public class AIReversi implements AI {
                 Board newBoard = board.Copy();
                 newBoard.setBoard(move, opponentPiece);
                 reversi.CheckCaptures(newBoard, move, opponentPiece);
-                score = Math.min(score, MiniMax(newBoard, depth - 1, true, start));
+                score = Math.min(score, MiniMax(newBoard, depth - 1, true, start, end));
             }
             return score;
         }
     }
 
-    private int AlphaBeta(Board board, int depth, boolean isMaximizing, int alpha, int beta, long start) {
-        if (depth == 0 || System.currentTimeMillis() - start > 9000) {
+    private int AlphaBeta(Board board, int depth, boolean isMaximizing, int alpha, int beta, long start, int end) {
+        if (depth == 0 || System.currentTimeMillis() - start > end) {
             return EvaluateBoard(board);
         }
         ArrayList<Integer> moves = GetValidMoves(board);
@@ -167,7 +171,7 @@ public class AIReversi implements AI {
                 Board newBoard = board.Copy();
                 newBoard.setBoard(move, myPiece);
                 reversi.CheckCaptures(newBoard, move, myPiece);
-                score = Math.max(score, AlphaBeta(newBoard, depth - 1, false, alpha, beta, start));
+                score = Math.max(score, AlphaBeta(newBoard, depth - 1, false, alpha, beta, start, end));
                 alpha = Math.max(alpha, score);
                 if (beta <= alpha) {
                     break;
@@ -181,7 +185,7 @@ public class AIReversi implements AI {
                 Board newBoard = board.Copy();
                 newBoard.setBoard(move, opponentPiece);
                 reversi.CheckCaptures(newBoard, move, opponentPiece);
-                score = Math.min(score, AlphaBeta(newBoard, depth - 1, true, alpha, beta, start));
+                score = Math.min(score, AlphaBeta(newBoard, depth - 1, true, alpha, beta, start, end));
                 beta = Math.min(beta, score);
                 if (beta <= alpha) {
                     break;
