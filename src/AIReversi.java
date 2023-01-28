@@ -50,7 +50,7 @@ public class AIReversi implements AI {
     private int GetAlphaBetaMove(Board board, long start) {
         int bestMove = -1;
         int bestScore = Integer.MIN_VALUE;
-        ArrayList<Integer> moves = GetValidMoves(board);
+        ArrayList<Integer> moves = GetValidMoves(board, myPiece);
         totalMoves += moves.size();
         int timePerMove = 9000/totalMoves;
         for (int move : moves) {
@@ -67,7 +67,7 @@ public class AIReversi implements AI {
     }
 
     private int GetAlphaBetaThreadMove(Board board, long start) {
-        ArrayList<Integer> moves = GetValidMoves(board);
+        ArrayList<Integer> moves = GetValidMoves(board, myPiece);
         totalMoves += moves.size();
         if (moves.size() == 1) {
             return moves.get(0);
@@ -107,7 +107,7 @@ public class AIReversi implements AI {
 
 
     private int GetMinimaxMove(Board board, long start) {
-        ArrayList<Integer> moves = GetValidMoves(board);
+        ArrayList<Integer> moves = GetValidMoves(board, myPiece);
         totalMoves += moves.size();
         int bestMove = -1;
         int bestScore = -1000;
@@ -130,10 +130,18 @@ public class AIReversi implements AI {
         if (depth == 0 || System.currentTimeMillis() - start > end) {
             return EvaluateBoard(board);
         }
-        ArrayList<Integer> moves = GetValidMoves(board);
+        String piece = isMaximizing ? myPiece : opponentPiece;
+
+        ArrayList<Integer> moves = GetValidMoves(board, piece);
         totalMoves += moves.size();
         if (moves.size() == 0) {
-            return EvaluateBoard(board);
+            String otherPiece = isMaximizing ? opponentPiece : myPiece;
+            ArrayList<Integer> otherMoves = GetValidMoves(board, otherPiece);
+            totalMoves += otherMoves.size();
+            if (otherMoves.size() == 0) {
+                return EvaluateBoard(board);
+            }
+            return MiniMax(board, depth, !isMaximizing, start, end);
         }
         if (isMaximizing) {
             int score = Integer.MIN_VALUE;
@@ -160,9 +168,16 @@ public class AIReversi implements AI {
         if (depth == 0 || System.currentTimeMillis() - start > end) {
             return EvaluateBoard(board);
         }
-        ArrayList<Integer> moves = GetValidMoves(board);
+        String piece = isMaximizing ? myPiece : opponentPiece;
+
+        ArrayList<Integer> moves = GetValidMoves(board, piece);
         if (moves.size() == 0) {
-            return EvaluateBoard(board);
+            String otherPiece = isMaximizing ? opponentPiece : myPiece;
+            ArrayList<Integer> otherMoves = GetValidMoves(board, otherPiece);
+            if (otherMoves.size() == 0) {
+                return EvaluateBoard(board);
+            }
+            return AlphaBeta(board, depth, !isMaximizing, alpha, beta, start, end);
         }
         if (isMaximizing) {
             int score = Integer.MIN_VALUE;
@@ -275,16 +290,16 @@ public class AIReversi implements AI {
 
 
     private int GetRandomMove(Board board) {
-        ArrayList<Integer> moves = GetValidMoves(board);
+        ArrayList<Integer> moves = GetValidMoves(board, myPiece);
         if (moves.size() == 0) {
         }
         int randomIndex = (int) (Math.random() * moves.size());
         return moves.get(randomIndex);
     }
 
-    private ArrayList<Integer> GetValidMoves(Board board) {
+    private ArrayList<Integer> GetValidMoves(Board board, String piece) {
         ArrayList<Integer> moves = new ArrayList<>();
-        boolean[][] validMoves = board.CheckValidMoves(myPiece, "Reversi");
+        boolean[][] validMoves = board.CheckValidMoves(piece, "Reversi");
         for (int i = 0; i < validMoves.length; i++) {
             for (int j = 0; j < validMoves[i].length; j++) {
                 if (validMoves[i][j]) {
