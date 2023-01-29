@@ -41,30 +41,19 @@ class Game implements ActionListener { // class to listen for messages from serv
                 if (Connection.in.ready()) { // if message is ready to be read
                     String message = Connection.in.readLine(); // read message from server\
                     System.out.println("Received: " + message); // print message to console
-                    if (message.contains("SVR GAME")) { // If message about the game
-                        if (message.contains("MATCH")) { // If SVR GAME Match - set opponent
+
+                    switch (message){
+                        case "SVR GAME MATCH" ->{
+                            // Split message and remove brackets to get the opponent
                             String[] split = message.split(" ");
                             opponent = split[8].replace("}", "").replace("\"", "");
+
+                            //Update the board with the opponent.
                             render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType));
                             render.UpdateFrame(render.panelBoard);
-                        } else if (message.contains("YOURTURN")) { // SVR GAME YOURTURN - Deze computer is aan de beurt
+                        }
+                        case "SVR GAME YOURTURN" ->{
                             isMyTurn = true;
-                            System.out.println(message);
-                            if (gameType.equals("TicTacToe")) { // If playing tictactoe
-                                if (myPiece == null) { // assign piece if null
-                                    myPiece = "O";
-                                    opponentPiece = "X";
-                                    ai = new AITicTacToe(myPiece, opponentPiece); // set TicTacToe AI
-                                }
-                            } else if (gameType.equals("Reversi")) { // If playing reversi
-                                if (myPiece == null) { // assign piece if null
-                                    myPiece = "⚫";
-                                    opponentPiece = "⚪";
-                                    ai = new AIReversi(myPiece, opponentPiece, player, reversi); // set Reversi AI
-                                }
-                            }
-                            // Check valid moves for the game type - obsolete call?
-                            board.CheckValidMoves(myPiece, gameType);
 
                             if (useAI) { // If using AI get the best move
                                 int move = ai.GetBestMove(board);
@@ -78,37 +67,41 @@ class Game implements ActionListener { // class to listen for messages from serv
                                     Connection.out.println("move " + moveString);
                                 }
                             }
-
                             else {
-                                isMyTurn = true;// obsolete?
+                                isMyTurn = true;
                             }
-
 
                             // Update renderer
                             render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType));
                             render.UpdateFrame(render.panelBoard);
-                            // End of SVR GAME YOURTURN
                             // Missing isMyTurn = false;?
-                        } else if (message.contains("CHALLENGE")) { // SVR GAME CHALLENGE - Received challenge from other
+                            // End of SVR GAME YOURTURN
+                        }
+                        case "SVR GAME CHALLENGE" ->{
                             // SVR GAME CHALLENGE {CHALLENGER: "reeeed", CHALLENGENUMBER: "6", GAMETYPE: "tic-tac-toe"}
+                            // Split message
                             String[] split = message.split(",");
+
+                            // Get challenger from split
                             String challenger = split[0].replace("SVR GAME CHALLENGE {CHALLENGER: \"", "").replace("\"", ""); // get challenger
+
+                            // Get challenge number from split
                             String challengeNumber = split[1].replace(" CHALLENGENUMBER: \"", "").replace("\"", ""); // get challenge number
+
+                            // Get gametype from split
                             String gameType = split[2].replace(" GAMETYPE: \"", "").replace("\"}", ""); // Get gametype
-                            OnChallengeReceive(challenger, challengeNumber, gameType); // Call for challenge received
-                        } else if (message.contains("MOVE")) { // SVR GAME MOVE -
+
+                            // Call for challenge received
+                            OnChallengeReceive(challenger, challengeNumber, gameType);
+                        }
+                        case "SVR GAME MOVE" ->{
                             String[] split = message.split(" ");
-//                        String player = split[4].replace(",", "").replace("\"", ""); kan later nog wel handig zijn
+//                          String player = split[4].replace(",", "").replace("\"", ""); kan later nog wel handig zijn
                             int move = Integer.parseInt(split[6].replace(",", "").replace("\"", ""));// Get the move made
 
-                            // Set all icons
+                            // Set the icons
                             String playerIcon = null;
                             if (gameType.equals("TicTacToe")) {
-                                if (myPiece == null) {
-                                    myPiece = "O";
-                                    opponentPiece = "X";
-                                    ai = new AITicTacToe(myPiece, opponentPiece);
-                                }
 
                                 if (moves % 2 == 0) {
                                     playerIcon = "X";
@@ -116,51 +109,47 @@ class Game implements ActionListener { // class to listen for messages from serv
                                     playerIcon = "O";
                                 }
                             } else if (gameType.equals("Reversi")) {
-                                if (myPiece == null) {
-                                    myPiece = "⚪";
-                                    opponentPiece = "⚫";
-                                    ai = new AIReversi(myPiece, opponentPiece, player, reversi);
-                                }
                                 if (message.contains(player)) {
                                     playerIcon = myPiece;
                                 } else {
                                     playerIcon = opponentPiece;
                                 }
-
-
                             }
 
-                            board.setBoard(move, playerIcon); // Put move on board
+                            board.setBoard(move, playerIcon); // Put move on board with icon
+                            moves++;
+
                             if (gameType.equals("Reversi")) {
                                 reversi.CheckCaptures(board, move, playerIcon); // Check for captures in reversi
                             }
-//                            board.printBoard();
-                            moves++;
-                            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType)); // Update renderer
+
+                            // Update the board UI
+                            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType));
                             render.UpdateFrame(render.panelBoard);
-                            // WIN DRAW LOSS
-                        } else if (message.contains("WIN")) {
+                        }
+                        case "SVR GAME WIN" ->{ // Player has won
                             String result = "Gefeliciteerd, je hebt gewonnen!";
                             winner = "WIN";
                             OnGameOver(result);
-                        } else if (message.contains("DRAW")) {
+                        }
+                        case "SVR GAME DRAW" ->{ // Game ends in draw
                             String result = "Jammer, je hebt gelijk gespeeld!";
                             winner = "DRAW";
                             OnGameOver(result);
-                        } else if (message.contains("LOSS")) {
+                        }
+                        case "SVR GAME LOSS" ->{ // Player lost the game
                             String result = "Helaas, je hebt verloren!";
                             winner = "LOSS";
                             OnGameOver(result);
-                        } else {
+                        }
+                        case "SVR PLAYERLIST" -> { // retrieve player list
+                            String[] split = message.split("SVR PLAYERLIST ");
+                            players = split[1].replace("[", "").replace("]", "").replace("\"", "");
+                        }
+                        default -> {
+                            // On OK or non-command message from server just print message
                             System.out.println(message);
                         }
-                    } else if (message.contains("SVR PLAYERLIST")) { // Get the playerlist
-                        String[] split = message.split("SVR PLAYERLIST ");
-                        players = split[1].replace("[", "").replace("]", "").replace("\"", "");
-                    } else if (message.contains("OK")) {
-                    // empty if on OK
-                    } else {
-                        System.out.println(message);
                     }
                 }
             }
@@ -170,11 +159,13 @@ class Game implements ActionListener { // class to listen for messages from serv
     }
 
     private void OnMove(String buttonText) {
+        //Send move to server
         Connection.out.println("MOVE " + buttonText);
         isMyTurn = false;
     }
 
     private void OnAIChoice(String buttonText) {
+        // User made choice on using AI
         useAI = buttonText.contains("Yes");
         render.UpdateFrame(render.panelGameChoice);
     }
@@ -219,20 +210,22 @@ class Game implements ActionListener { // class to listen for messages from serv
 
     private void OnChallenge() {
         Connection.out.println("get playerlist");
-        while (players == null) {
+        while (players == null) { // Wait until the player list has updated
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        render.ChallengeRender(players);
+        render.ChallengeRender(players); // render the player list
         render.UpdateFrame(render.panelChallenge);
     }
 
     private void OnChallengeSend(String buttonText) {
         players = null;
         Connection.out.println(buttonText + " Reversi");
+
+        //Create new reversi board and update UI
         board = new Board(8, 8);
         reversi = new Reversi(board);
         render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType));
@@ -245,7 +238,7 @@ class Game implements ActionListener { // class to listen for messages from serv
         // option = 0 -> yes
         // option = 1 -> no
 
-        if (option == 0) {
+        if (option == 0) { // Always yes
             Connection.out.println("challenge accept " + challengeNumber);
             board = new Board(8, 8);
             reversi = new Reversi(board);
@@ -259,12 +252,27 @@ class Game implements ActionListener { // class to listen for messages from serv
     private void OnSubscribe(String gameType) {
         this.gameType = gameType;
         if (gameType.equals("TicTacToe")) {
-            Connection.out.println("subscribe Tic-Tac-Toe");
+            Connection.out.println("subscribe Tic-Tac-Toe"); // Subscribe to tictactoe
+
+            // Set pieces and AI
+            myPiece = "O";
+            opponentPiece = "X";
+            ai = new AITicTacToe(myPiece, opponentPiece); // set TicTacToe AI
+
+            // Create board and update
             board = new Board(3, 3);
             render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType));
             render.UpdateFrame(render.panelBoard);
+
         } else if (gameType.equals("Reversi")) {
-            Connection.out.println("subscribe Reversi");
+            Connection.out.println("subscribe Reversi"); // Subscribe to reversi
+
+            // Set Reversi pieces
+            myPiece = "⚫";
+            opponentPiece = "⚪";
+            ai = new AIReversi(myPiece, opponentPiece, player, reversi); // set Reversi AI
+
+            // Create board and update
             board = new Board(8, 8);
             reversi = new Reversi(board);
             render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType));
@@ -273,8 +281,11 @@ class Game implements ActionListener { // class to listen for messages from serv
     }
 
     public void OnLogin(String username) {
+        // Set username and login to server
         this.player = username;
         Connection.out.println("login " + username);
+
+        // If login was OK, show AI Choice panel
         try {
             String message = Connection.in.readLine();
             if (message.equals("OK")) {
@@ -288,12 +299,14 @@ class Game implements ActionListener { // class to listen for messages from serv
     }
 
     private void OnQuit() {
+        // Write data results to a CSV file
         Results.WriteToCSV(dataSet);
 
         render.UpdateFrame(render.panelGameChoice);
     }
 
     public void actionPerformed(ActionEvent e) {
+        //Checks for UI Events using a switch
         String buttonText;
         switch (e.getActionCommand()) {
             case "Login":
@@ -342,7 +355,6 @@ class Game implements ActionListener { // class to listen for messages from serv
             case "ChallengeBack":
                 render.UpdateFrame(render.panelGameChoice);
                 break;
-            //TODO add all Event calls.
         }
 
     }
@@ -363,6 +375,7 @@ class Game implements ActionListener { // class to listen for messages from serv
     }
 
     public void StartGame(String player1, Boolean receiving, String Opponent, int games) {
+        // Start game uses data form console arguments to start a game
         OnLogin(player1);
         OnAIChoice("Yes");
         gameType = "Reversi";
