@@ -110,15 +110,17 @@ public class AIReversi implements AI {
         ArrayList<Integer> moves = GetValidMoves(board, myPiece);
         totalMoves += moves.size();
         int bestMove = -1;
-        int bestScore = -1000;
+        int bestScore = Integer.MIN_VALUE;
         int timePerMove = 9000/totalMoves;
         for (int move : moves) {
+            System.out.println("Move: " + move);
             int end = timePerMove * (moves.indexOf(move) + 1);
             Board newBoard = board.Copy();
             newBoard.setBoard(move, myPiece);
             reversi.CheckCaptures(newBoard, move, myPiece);
             int score = MiniMax(newBoard, -1, false, start, end);
             if (score > bestScore) {
+                System.out.println("Move: " + move + " Score: " + score);
                 bestScore = score;
                 bestMove = move;
             }
