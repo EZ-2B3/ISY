@@ -55,6 +55,20 @@ class Game implements ActionListener { // class to listen for messages from serv
                         case "SVR GAME YOURTURN" ->{
                             isMyTurn = true;
 
+                            if (gameType.equals("TicTacToe")) { // If playing tictactoe
+                                if (myPiece == null) { // assign piece if null
+                                    myPiece = "O";
+                                    opponentPiece = "X";
+                                    ai = new AITicTacToe(myPiece, opponentPiece); // set TicTacToe AI
+                                }
+                            } else if (gameType.equals("Reversi")) { // If playing reversi
+                                if (myPiece == null) { // assign piece if null
+                                    myPiece = "⚫";
+                                    opponentPiece = "⚪";
+                                    ai = new AIReversi(myPiece, opponentPiece, player, reversi); // set Reversi AI
+                                }
+                            }
+
                             if (useAI) { // If using AI get the best move
                                 int move = ai.GetBestMove(board);
                                 movesEvaluated = movesEvaluated + ai.GetTotalMoves();
@@ -102,6 +116,12 @@ class Game implements ActionListener { // class to listen for messages from serv
                             // Set the icons
                             String playerIcon = null;
                             if (gameType.equals("TicTacToe")) {
+                                if (myPiece == null) {
+                                    myPiece = "O";
+                                    opponentPiece = "X";
+                                    ai = new AITicTacToe(myPiece, opponentPiece);
+                                }
+
 
                                 if (moves % 2 == 0) {
                                     playerIcon = "X";
@@ -109,6 +129,12 @@ class Game implements ActionListener { // class to listen for messages from serv
                                     playerIcon = "O";
                                 }
                             } else if (gameType.equals("Reversi")) {
+
+                                if (myPiece == null) {
+                                    myPiece = "⚪";
+                                    opponentPiece = "⚫";
+                                    ai = new AIReversi(myPiece, opponentPiece, player, reversi);
+                                }
                                 if (message.contains(player)) {
                                     playerIcon = myPiece;
                                 } else {
