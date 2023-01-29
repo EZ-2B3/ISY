@@ -42,7 +42,11 @@ class Game implements ActionListener { // class to listen for messages from serv
                     String message = Connection.in.readLine(); // read message from server\
                     System.out.println("Received: " + message); // print message to console
 
-                    switch (message){
+                    //split message to first 3
+                    String[] subsplit = message.split("");
+                    String submessage = subsplit[0].concat(subsplit[1]); // Concat first 2 words together
+                    if(subsplit.length > 2){submessage.concat(subsplit[3]);} // If there is a 3rd word add it.
+                    switch (submessage){
                         case "SVR GAME MATCH" ->{
                             // Split message and remove brackets to get the opponent
                             String[] split = message.split(" ");
