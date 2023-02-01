@@ -241,10 +241,6 @@ class Game implements ActionListener { // class to listen for messages from serv
 
     private void OnChallengeReceive(String challenger, String challengeNumber, String gameType) {
         int option = 0;
-//        int option = JOptionPane.showConfirmDialog(render.frame, challenger + " has challenged you to a game of " + gameType + "\nDo you want to play against them?", "Challenge", JOptionPane.YES_NO_OPTION);
-        // option = 0 -> yes
-        // option = 1 -> no
-
         if (option == 0) {
             Connection.out.println("challenge accept " + challengeNumber);
             board = new Board(8, 8);

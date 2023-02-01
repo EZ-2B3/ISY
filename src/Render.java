@@ -33,122 +33,123 @@ public class Render {
     }
 
     public void BoardRender(String[][] board, boolean turn, String opponent, String gameType, boolean[][] validMoves) {
-        int rows = board.length;
-        int cols = board[0].length;
-        panelBoard.removeAll();
-        frame.setTitle(gameType + " - " + opponent + " - " + (turn ? "Your turn" : "Opponent's turn"));
-        panelBoard.setLayout(new GridLayout(rows, cols));
+        int rows = board.length; //Get number of rows
+        int cols = board[0].length; //Get number of columns
+
+        panelBoard.removeAll(); //Remove all components from panel
+        frame.setTitle(gameType + " - " + opponent + " - " + (turn ? "Your turn" : "Opponent's turn")); //Set title of frame
+        panelBoard.setLayout(new GridLayout(rows, cols)); //Set layout of panel
+
         int n = 0;
-        for (String[] strings : board) {
-            for (int j = 0; j < cols; j++) {
-                JButton button = new JButton(strings[j]);
-                button.setFont(new Font("", Font.PLAIN, 25));
-                button.setEnabled(validMoves[n / cols][n % cols] && turn);
-                button.setName(String.valueOf(n));
-                button.addActionListener(actionListener);
-                button.setActionCommand("move");
-                panelBoard.add(button);
-                n++;
+        for (String[] strings : board) { //Loop through rows
+            for (int j = 0; j < cols; j++) { //Loop through columns
+                JButton button = new JButton(strings[j]); //Create button
+                button.setFont(new Font("", Font.PLAIN, 25)); //Set font of button
+                button.setEnabled(validMoves[n / cols][n % cols] && turn); //Set button enabled if it is a valid move and it is the player's turn
+                button.setName(String.valueOf(n)); //Set name of button to the index of the button
+                button.addActionListener(actionListener); //Add action listener to button
+                button.setActionCommand("move"); //Set action command of button
+                panelBoard.add(button); //Add button to panel
+                n++; //Increment n
             }
         }
     }
 
     private void CreateLogin() {
-        JLabel askName = new JLabel("Enter your name:");
-        JButton exit = new JButton("Exit");
+        JLabel askName = new JLabel("Enter your name:"); //Create label
+        JButton exit = new JButton("Exit"); //Create button
 
-        panelLogin.add(askName);
+        panelLogin.add(askName); //Add label to panel
 
-        username.setActionCommand("Login");
-        username.addActionListener(this.actionListener);
-        panelLogin.add(username);
+        username.setActionCommand("Login"); //Set action command of text field
+        username.addActionListener(this.actionListener); //Add action listener to text field
+        panelLogin.add(username); //Add text field to panel
 
-        exit.addActionListener(this.actionListener);
-        panelLogin.add(exit);
+        exit.addActionListener(this.actionListener); //Add action listener to button
+        panelLogin.add(exit); //Add button to panel
     }
 
     private void CreateAIChoice() {
-        JLabel askAI = new JLabel("Do you want to play as an AI?");
-        JButton yes = new JButton("Yes");
-        JButton no = new JButton("No");
+        JLabel askAI = new JLabel("Do you want to play as an AI?"); //Create label
+        JButton yes = new JButton("Yes"); //Create button
+        JButton no = new JButton("No"); //Create button
 
-        yes.setActionCommand("AIChoice");
-        yes.addActionListener(this.actionListener);
-        panelAIChoice.add(yes);
+        yes.setActionCommand("AIChoice"); //Set action command of button
+        yes.addActionListener(this.actionListener); //Add action listener to button
+        panelAIChoice.add(yes); //Add button to panel
 
-        no.setActionCommand("AIChoice");
-        no.addActionListener(this.actionListener);
-        panelAIChoice.add(no);
+        no.setActionCommand("AIChoice"); //Set action command of button
+        no.addActionListener(this.actionListener); //Add action listener to button
+        panelAIChoice.add(no); //Add button to panel
 
-        panelAIChoice.add(askAI);
+        panelAIChoice.add(askAI); //Add label to panel
     }
 
     private void CreateGameChoice() {
-        JButton ticTacToe = new JButton("Tic-Tac-Toe");
-        JButton reversi = new JButton("Reversi");
-        JButton challenge = new JButton("Challenge");
-        JButton exit = new JButton("Exit");
+        JButton ticTacToe = new JButton("Tic-Tac-Toe"); //Create button
+        JButton reversi = new JButton("Reversi"); //Create button
+        JButton challenge = new JButton("Challenge"); //Create button
+        JButton exit = new JButton("Exit"); //Create button
 
-        ticTacToe.addActionListener(this.actionListener);
-        panelGameChoice.add(ticTacToe);
+        ticTacToe.addActionListener(this.actionListener); //Add action listener to button
+        panelGameChoice.add(ticTacToe); //Add button to panel
 
-        reversi.addActionListener(this.actionListener);
-        panelGameChoice.add(reversi);
+        reversi.addActionListener(this.actionListener); //Add action listener to button
+        panelGameChoice.add(reversi); //Add button to panel
 
-        challenge.addActionListener(this.actionListener);
-        panelGameChoice.add(challenge);
+        challenge.addActionListener(this.actionListener); //Add action listener to button
+        panelGameChoice.add(challenge); //Add button to panel
 
-        panelGameChoice.add(exit);
-        exit.addActionListener(this.actionListener);
+        panelGameChoice.add(exit); //Add button to panel
+        exit.addActionListener(this.actionListener); //Add action listener to button
     }
 
     public void ChallengeRender(String players) {
-        panelChallenge.removeAll();
-        frame.setTitle("Challenge");
-        String[] playerList = players.split(", ");
-        for (String player : playerList) {
-            // place the player name in a vertical list with a button to challenge them next to their name (if they are not you) on the right side of the screen
-            if (!player.equals(username.getText())) {
-                JButton button = new JButton("Challenge " + player);
-                button.setActionCommand("ChallengeSend");
-                button.addActionListener(this.actionListener);
-                panelChallenge.add(button);
+        panelChallenge.removeAll(); //Remove all components from panel
+        frame.setTitle("Challenge"); //Set title of frame
+        String[] playerList = players.split(", "); //Split players string into array of players
+        for (String player : playerList) { //Loop through players
+            if (!player.equals(username.getText())) { //If player is not the current player
+                JButton button = new JButton("Challenge " + player); //Create button
+                button.setActionCommand("ChallengeSend"); //Set action command of button
+                button.addActionListener(this.actionListener); //Add action listener to button
+                panelChallenge.add(button); //Add button to panel
             }
         }
-        // place a button to go back to the game choice screen on the bottom of the screen and center it
-        JButton button = new JButton("Back");
-        button.setActionCommand("ChallengeBack");
-        button.addActionListener(this.actionListener);
-        panelChallenge.add(button);
+
+        JButton button = new JButton("Back"); //Create button
+        button.setActionCommand("ChallengeBack"); //Set action command of button
+        button.addActionListener(this.actionListener); //Add action listener to button
+        panelChallenge.add(button); //Add button to panel
     }
 
     public void UpdateFrame(JPanel panel) {
-        frame.setContentPane(panel);
-        frame.revalidate();
-        frame.repaint();
+        frame.setContentPane(panel); //Set content pane of frame to panel
+        frame.revalidate(); //Revalidate frame
+        frame.repaint(); //Repaint frame
     }
 
     public void GameOverRender(String result, String opponent) {
         // TODO: GameType meenemen
-        JPopupMenu popup = new JPopupMenu();
+        JPopupMenu popup = new JPopupMenu(); //Create popup menu
 
-        JLabel label = new JLabel(result);
-        popup.add(label);
+        JLabel label = new JLabel(result); //Create label
+        popup.add(label); //Add label to popup menu
 
-        JMenuItem menuItem = new JMenuItem("challenge " + opponent);
-        menuItem.setActionCommand("ChallengeSend");
-        menuItem.addActionListener(this.actionListener);
-        popup.add(menuItem);
+        JMenuItem menuItem = new JMenuItem("challenge " + opponent); //Create menu item
+        menuItem.setActionCommand("ChallengeSend"); //Set action command of menu item
+        menuItem.addActionListener(this.actionListener); //Add action listener to menu item
+        popup.add(menuItem); //Add menu item to popup menu
 
-        JMenuItem menuItem2 = new JMenuItem("Subscribe to this gametype again");
-        menuItem2.setActionCommand("Reversi");
-        menuItem2.addActionListener(this.actionListener);
-        popup.add(menuItem2);
+        JMenuItem menuItem2 = new JMenuItem("Subscribe to this gametype again"); //Create menu item
+        menuItem2.setActionCommand("Reversi"); //Set action command of menu item
+        menuItem2.addActionListener(this.actionListener); //Add action listener to menu item
+        popup.add(menuItem2); //Add menu item to popup menu
 
-        JMenuItem menuItem3 = new JMenuItem("Quit");
-        menuItem3.addActionListener(this.actionListener);
-        popup.add(menuItem3);
+        JMenuItem menuItem3 = new JMenuItem("Quit"); //Create menu item
+        menuItem3.addActionListener(this.actionListener); //Add action listener to menu item
+        popup.add(menuItem3); //Add menu item to popup menu
 
-        popup.show(frame, frame.getWidth() / 2, frame.getHeight() / 2);
+        popup.show(frame, frame.getWidth() / 2, frame.getHeight() / 2); //Show popup menu
     }
 }
