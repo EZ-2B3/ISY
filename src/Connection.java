@@ -1,13 +1,25 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
+import java.util.Scanner;
+
 
 public class Connection {
     final protected Socket echoSocket;
-    final protected int portNumber = 7789;
-    final protected String hostName = "game.bier.dev";
+    public static final int portNumber;
+    public static final String hostName;
+
+    static {
+       int conts_1;
+       String const_2;
+       try(Scanner s = new Scanner(new File("./resources/config.properties"))) {
+           conts_1 = s.nextInt();
+           const_2 = s.next();
+       } catch (FileNotFoundException e) {
+           throw new RuntimeException(e);
+       }
+        portNumber = conts_1;
+        hostName = const_2;
+    }
 
     {
         try { // try to create socket to connect to server

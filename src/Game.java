@@ -274,6 +274,7 @@ class Game implements ActionListener { // class to listen for messages from serv
 
     public void OnLogin(String username) {
         this.player = username;
+        this.aiType = username;
         Connection.out.println("login " + username);
         try {
             String message = Connection.in.readLine();
