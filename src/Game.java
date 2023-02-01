@@ -41,7 +41,6 @@ class Game implements ActionListener { // class to listen for messages from serv
             while (true) { // while true
                 if (Connection.in.ready()) { // if message is ready to be read
                     String message = Connection.in.readLine(); // read message from server\
-                    System.out.println(message);
                     if (message.contains("SVR GAME")) {
                         if (message.contains("MATCH")) {
                             String[] split = message.split(" ");
@@ -356,7 +355,7 @@ class Game implements ActionListener { // class to listen for messages from serv
         board = new Board(8, 8);
         useAI = true;
         reversi = new Reversi(board);
-        ai = new AIReversi(myPiece, gameType, aiType, reversi);
+        gameType = "Reversi";
         render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType));
         render.UpdateFrame(render.panelBoard);
 
