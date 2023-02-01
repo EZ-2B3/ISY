@@ -71,6 +71,7 @@ public class Render {
         JLabel askAI = new JLabel("Do you want to play as an AI?");
         JButton yes = new JButton("Yes");
         JButton no = new JButton("No");
+        JButton tournament = new JButton("Tournament");
 
         yes.setActionCommand("AIChoice");
         yes.addActionListener(this.actionListener);
@@ -81,6 +82,11 @@ public class Render {
         panelAIChoice.add(no);
 
         panelAIChoice.add(askAI);
+
+        tournament.setActionCommand("Tournament");
+        tournament.addActionListener(this.actionListener);
+        panelAIChoice.add(tournament);
+
     }
 
     private void CreateGameChoice() {
