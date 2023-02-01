@@ -270,6 +270,7 @@ class Game implements ActionListener { // class to listen for messages from serv
 
     public void OnLogin(String username) {
         this.player = username;
+        this.aiType = username;
         Connection.out.println("login " + username);
         try {
             String message = Connection.in.readLine();
@@ -339,7 +340,20 @@ class Game implements ActionListener { // class to listen for messages from serv
                 render.UpdateFrame(render.panelGameChoice);
                 break;
             //TODO add all Event calls.
+            case "Tournament":
+                OnTournament();
+                break;
         }
+
+    }
+
+    private void OnTournament() {
+        board = new Board(8, 8);
+        useAI = true;
+        reversi = new Reversi(board);
+        gameType = "Reversi";
+        render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType));
+        render.UpdateFrame(render.panelBoard);
 
     }
 
