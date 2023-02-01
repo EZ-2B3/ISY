@@ -30,7 +30,7 @@ class Game implements ActionListener { // class to listen for messages from serv
     private int movesEvaluated;
     private int movesPlayed;
     private String aiType;
-
+    private boolean tournament = false;
 
     public Game() {
         this.render = new Render(this);
@@ -212,6 +212,11 @@ class Game implements ActionListener { // class to listen for messages from serv
             if (!receiving) {
                 OnChallengeSend("challenge " + opponent);
             }
+        } else if (tournament){
+            board = new Board(8, 8);
+            reversi = new Reversi(board);
+            render.BoardRender(board.getBoard(), isMyTurn, opponent, gameType, board.CheckValidMoves(myPiece, gameType));
+            render.UpdateFrame(render.panelBoard);
         } else {
             render.GameOverRender(result, opponent);
         }
@@ -352,6 +357,7 @@ class Game implements ActionListener { // class to listen for messages from serv
     }
 
     private void OnTournament() {
+        tournament = true;
         board = new Board(8, 8);
         useAI = true;
         reversi = new Reversi(board);
