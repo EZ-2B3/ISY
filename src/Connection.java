@@ -22,8 +22,8 @@ public class Connection {
     }
 
     {
-        try { // try to create socket to connect to server
-            // port number of server
+        try { // proberen om een socket te creeren om met de server te connecten
+            // poort nummer van de server
             echoSocket = new Socket(hostName, portNumber);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
