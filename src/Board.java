@@ -2,10 +2,14 @@ import java.util.Objects;
 
 public class Board { // class to create the board for the game (CLI)
 
+    // private final String[][] board; // 2D array waar de board in wordt opgeslagen
     private final String[][] board;
+    // private final int rows; // aantal rijen
     private int rows = 0;
+    // private final int cols; // aantal kolommen
     private int cols = 0;
 
+    // public Board(int rows, int cols) {
     public Board(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
@@ -35,87 +39,86 @@ public class Board { // class to create the board for the game (CLI)
         board[rows][cols] = piece; // Veranderd de waarde van de rows en cols naar de piece
     }
 
+    // zet de board opnieuw
     public void setBoard(int move, String playerIcon) {
-        int row = move / rows;
-        int col = move % cols;
+        int row = move / rows; // berekent de row
+        int col = move % cols; // berekent de col
 
-        board[row][col] = playerIcon;
+        board[row][col] = playerIcon; // zet de waarde van de row en col naar de playerIcon
     }
 
-    public Board Copy() {
-        //Makes a copy of the board and returns a new instance
-        Board copy = new Board(this.rows, this.cols);
+    public Board Copy() { // Maakt een kopie van het bord en returned een nieuwe instantie
+        Board copy = new Board(this.rows, this.cols); // Maakt een nieuwe instantie van het bord
 
-        for (int i = 0; i < this.rows; i++) {
-            for (int j = 0; j < this.cols; j++) {
-                copy.setBoard(i, j, this.board[i][j]);
+        for (int i = 0; i < this.rows; i++) { // Loop voor elke rij
+            for (int j = 0; j < this.cols; j++) { // Loop voor elke kolom
+                copy.setBoard(i, j, this.board[i][j]); // Zet de waarde van de rij en kolom op de waarde van de rij en kolom van het originele bord
             }
         }
-
         return copy;
     }
 
-    public void printBoard() {
-        for (int i = 0; i < cols; i++) {
-            System.out.print("----");
-        }
-        System.out.println("-");
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                System.out.print("| " + board[i][j] + " ");
-            }
-            System.out.println("|");
-            for (int k = 0; k < cols; k++) {
-                System.out.print("----");
-            }
-            System.out.println("-");
-        }
-    }
+//    public void printBoard() {
+//        for (int i = 0; i < cols; i++) {
+//            System.out.print("----");
+//        }
+//        System.out.println("-");
+//        for (int i = 0; i < rows; i++) {
+//            for (int j = 0; j < cols; j++) {
+//                System.out.print("| " + board[i][j] + " ");
+//            }
+//            System.out.println("|");
+//            for (int k = 0; k < cols; k++) {
+//                System.out.print("----");
+//            }
+//            System.out.println("-");
+//        }
+//    }
 
-    public boolean[][] CheckValidMoves(String playerIcon, String gameType) {
-        boolean[][] validMoves = new boolean[board.length][board[0].length];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (gameType == "Reversi") {
-                    validMoves[i][j] = CheckValidMoveReversi(i, j, playerIcon);
-                } else if (gameType == "TicTacToe") {
-                    validMoves[i][j] = CheckValidMoveTicTacToe(i, j, playerIcon);
+    public boolean[][] CheckValidMoves(String playerIcon, String gameType) { // Check of de move valid is
+        boolean[][] validMoves = new boolean[board.length][board[0].length]; // Maakt een 2D array aan met de lengte van het bord
+        for (int i = 0; i < rows; i++) { // Loop voor elke rij
+            for (int j = 0; j < cols; j++) { // Loop voor elke kolom
+                if (gameType == "Reversi") { // Checkt of het spel Reversi is
+                    validMoves[i][j] = CheckValidMoveReversi(i, j, playerIcon); // Checkt of de move valid is
+                } else if (gameType == "TicTacToe") { // Checkt of het spel TicTacToe is
+                    validMoves[i][j] = CheckValidMoveTicTacToe(i, j, playerIcon); // Checkt of de move valid is
                 }
             }
         }
-        return validMoves;
+        return validMoves; // Returned de 2D array met de valid moves
     }
 
-    private boolean CheckValidMoveTicTacToe(int row, int col, String playerIcon) {
-        return Objects.equals(board[row][col], " ");
+    private boolean CheckValidMoveTicTacToe(int row, int col, String playerIcon) { // Checkt of de move valid is voor TicTacToe
+        return Objects.equals(board[row][col], " "); // Returned of de waarde van de row en col gelijk is aan een spatie
     }
 
-    private boolean CheckValidMoveReversi(int row, int col, String playerIcon) {
-        boolean validMove = false;
-        String opponentIcon = playerIcon == "⚫" ? "⚪" : "⚫";
+    private boolean CheckValidMoveReversi(int row, int col, String playerIcon) { // Checkt of de move valid is voor Reversi
+        boolean validMove = false; // Zet de validMove op false
+        String opponentIcon = playerIcon == "⚫" ? "⚪" : "⚫"; // Checkt of de playerIcon gelijk is aan een zwarte of witte piece
 
         // Check if the move is valid
-        if (board[row][col] == " " || board[row][col] == "") {
-            // Check if the move is valid in the north direction
-            if (row - 1 >= 0 && board[row - 1][col] == opponentIcon) {
-                for (int i = row - 2; i >= 0; i--) {
-                    if (board[i][col] == playerIcon) {
-                        validMove = true;
+        if (board[row][col] == " " || board[row][col] == "") { // Checkt of de waarde van de row en col gelijk is aan een spatie
+
+            if (row - 1 >= 0 && board[row - 1][col] == opponentIcon) { // Checkt of de row - 1 groter of gelijk is aan 0 en of de waarde van de row - 1 en col gelijk is aan de opponentIcon
+                for (int i = row - 2; i >= 0; i--) { // Loop voor elke rij vanaf de row - 2
+                    if (board[i][col] == playerIcon) { // Checkt of de waarde van de rij en col gelijk is aan de playerIcon
+                        validMove = true; // Zet de validMove op true
                         break;
-                    } else if (board[i][col] == " " || board[i][col] == "") {
+                    } else if (board[i][col] == " " || board[i][col] == "") { // Checkt of de waarde van de rij en col gelijk is aan een spatie
                         break;
                     }
                 }
             }
 
             // Check if the move is valid in the south direction
-            if (row + 1 < rows && board[row + 1][col] == opponentIcon) {
-                for (int i = row + 2; i < rows; i++) {
-                    if (board[i][col] == playerIcon) {
-                        validMove = true;
-                        break;
-                    } else if (board[i][col] == " " || board[i][col] == "") {
-                        break;
+            if (row + 1 < rows && board[row + 1][col] == opponentIcon) { // Checkt of de row + 1 kleiner is dan het aantal rijen en of de waarde van de row + 1 en col gelijk is aan de opponentIcon
+                for (int i = row + 2; i < rows; i++) { // Loop voor elke rij vanaf de row + 2
+                    if (board[i][col] == playerIcon) { // Checkt of de waarde van de rij en col gelijk is aan de playerIcon
+                        validMove = true; // Zet de validMove op true
+                        break; // Breakt de loop
+                    } else if (board[i][col] == " " || board[i][col] == "") { // Checkt of de waarde van de rij en col gelijk is aan een spatie
+                        break; // Breakt de loop
                     }
                 }
             }
@@ -194,7 +197,7 @@ public class Board { // class to create the board for the game (CLI)
         return validMove;
     }
 
-    public boolean IsValidMove(int i, int j, String myPiece) {
-        return CheckValidMoveReversi(i, j, myPiece);
+    public boolean IsValidMove(int i, int j, String myPiece) { // Checkt of de move valid is
+        return CheckValidMoveReversi(i, j, myPiece); // Returned de CheckValidMoveReversi
     }
 }
