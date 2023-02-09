@@ -4,20 +4,20 @@ import java.util.Scanner;
 
 
 public class Connection {
-    final protected Socket echoSocket;
-    public static final int portNumber;
-    public static final String hostName;
+    final protected Socket echoSocket; // socket om met de server te connecten
+    public static final int portNumber; // poort nummer van de server
+    public static final String hostName;  // hostnaam van de server
 
     static {
        int conts_1;
-       String const_2;
-       try(Scanner s = new Scanner(new File("./resources/config.properties"))) {
-           conts_1 = s.nextInt();
-           const_2 = s.next();
-       } catch (FileNotFoundException e) {
-           throw new RuntimeException(e);
+       String const_2;  
+       try(Scanner s = new Scanner(new File("./resources/config.properties"))) { // proberen om een scanner te creeren om de config file te lezen
+           conts_1 = s.nextInt(); // poort nummer van de server
+           const_2 = s.next(); // hostnaam van de server
+       } catch (FileNotFoundException e) { // als er een fout optreedt wordt een runtime exception gegooid
+           throw new RuntimeException(e); 
        }
-        portNumber = conts_1;
+        portNumber = conts_1; 
         hostName = const_2;
     }
 
@@ -30,23 +30,23 @@ public class Connection {
         }
     }
 
-    static PrintWriter out;
+    static PrintWriter out; // printwriter om data naar de server te sturen
 
     {
         try {
-            out = new PrintWriter(echoSocket.getOutputStream(), true);
+            out = new PrintWriter(echoSocket.getOutputStream(), true); // true zorgt ervoor dat de data direct wordt verstuurd
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            throw new RuntimeException(ex); // als er een fout optreedt wordt een runtime exception gegooid
         }
     }
 
     static BufferedReader in;
 
     {
-        try {
+        try { // proberen om een bufferedreader te creeren om data van de server te lezen
             in = new BufferedReader(
-                    new InputStreamReader(echoSocket.getInputStream()));
-        } catch (IOException ex) {
+                    new InputStreamReader(echoSocket.getInputStream())); // bufferedreader om data van de server te lezen
+        } catch (IOException ex) { // als er een fout optreedt wordt een runtime exception gegooid
             throw new RuntimeException(ex);
         }
     }
