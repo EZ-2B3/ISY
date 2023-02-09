@@ -1,6 +1,6 @@
-import java.io.*;
-import java.net.Socket;
-import java.util.Scanner;
+import java.io.*; // importeren van de input en output
+import java.net.Socket; // importeren van de socket
+import java.util.Scanner; // importeren van de scanner
 
 
 public class Connection {
@@ -23,10 +23,10 @@ public class Connection {
 
     {
         try { // proberen om een socket te creeren om met de server te connecten
-            // poort nummer van de server
-            echoSocket = new Socket(hostName, portNumber);
+            
+            echoSocket = new Socket(hostName, portNumber); // socket om met de server te connecten
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            throw new RuntimeException(ex); // als er een fout optreedt wordt een runtime exception gegooid
         }
     }
 
@@ -40,7 +40,7 @@ public class Connection {
         }
     }
 
-    static BufferedReader in;
+    static BufferedReader in; // bufferedreader om data van de server te lezen
 
     {
         try { // proberen om een bufferedreader te creeren om data van de server te lezen
