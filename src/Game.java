@@ -1,11 +1,14 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 class Game implements ActionListener { // class to listen for messages from server in a separate thread
     private final Render render;
@@ -163,9 +166,22 @@ class Game implements ActionListener { // class to listen for messages from serv
         }
     }
 
+    private void playMoveSound() {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/Sounds/MovePieceSound.wav").getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch(Exception ex) {
+            System.out.println("Error playing sound.");
+            ex.printStackTrace();
+        }
+    }
+
     private void OnMove(String buttonText) {
         Connection.out.println("MOVE " + buttonText);
         isMyTurn = false;
+        playMoveSound();
     }
 
     private void OnAIChoice(String buttonText) {

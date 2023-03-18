@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Render {
@@ -30,7 +31,82 @@ public class Render {
         CreateGameChoice();
         frame.setTitle("Login"); // set title of frame
         UpdateFrame(panelLogin);
+        // create menu bar
+        JMenuBar menuBar = new JMenuBar();
+
+        // create file menu
+        JMenu Menu = new JMenu("Menu");
+        menuBar.add(Menu);
+
+        // create edit frame size option
+        JMenuItem editSizeItem = new JMenuItem("Edit Frame Size");
+
+        // create settings menu
+        JMenu Settings = new JMenu("Settings");
+        menuBar.add(Settings);
+
+        // create screen size submenu
+        JMenu ScreenSize = new JMenu("Screen Size");
+        Settings.add(ScreenSize);
+
+        // create 500x500 option
+        JMenuItem size500Item = new JMenuItem("500x500");
+        size500Item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setSize(500, 500);
+            }
+        });
+        ScreenSize.add(size500Item);
+
+        // create 800x600 option
+        JMenuItem size800Item = new JMenuItem("800x600");
+        size800Item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setSize(800, 600);
+            }
+        });
+        ScreenSize.add(size800Item);
+
+        // create 1024x768 option
+        JMenuItem size1024Item = new JMenuItem("1024x768");
+        size1024Item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setSize(1024, 768);
+            }
+        });
+        ScreenSize.add(size1024Item);
+
+        // create fullscreen option
+        JMenuItem fullscreenItem = new JMenuItem("Fullscreen");
+        fullscreenItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            }
+        });
+        ScreenSize.add(fullscreenItem);
+
+        // create exit option
+        JMenuItem exitItem = new JMenuItem("Exit");
+        exitItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+
+        });
+        Menu.add(exitItem);
+
+        // add menu bar to frame
+        frame.setJMenuBar(menuBar);
     }
+
+
+
+
 
     public void BoardRender(String[][] board, boolean turn, String opponent, String gameType, boolean[][] validMoves) {
         int rows = board.length; //Get number of rows
