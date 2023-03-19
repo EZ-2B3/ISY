@@ -112,21 +112,43 @@ public class Render {
 
     });
         Menu.add(songMenu);
+
         JMenuItem song1 = new JMenuItem("Song 1");
         song1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Song 1 selected");
-                // TODO: play Song 1
+                try {
+                    // Load audio file
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("song1.wav"));
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audioIn);
 
+                    // Start playing audio
+                    clip.start();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
         songMenu.add(song1);
+
         JMenuItem song2 = new JMenuItem("Song 2");
         song2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Song 2 selected");
-                // TODO: play Song 2
+                try {
+                    // Load audio file
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("src/Sounds/brute_force.wav"));
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audioIn);
+
+                    // Start playing audio
+                    clip.start();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
+
         });
         songMenu.add(song2);
 
@@ -134,20 +156,34 @@ public class Render {
         song3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Song 3 selected");
-                // TODO: play Song 3
+                try {
+
+
+                    // Load audio file
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("src/Sounds/nightdelivery5.wav"));
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audioIn);
+
+                    // Start playing audio
+                    clip.start();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
+
         });
         songMenu.add(song3);
 
         JMenuItem stopSong = new JMenuItem("Stop the music");
-        song3.addActionListener(new ActionListener() {
+        stopSong.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Music stopped!");
-                // TODO: Stop playing music
+                // Stop current playing clips
+
 
             }
         });
-        songMenu.add(song3);
+        songMenu.add(stopSong);
 
 
 
