@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.sound.sampled.*;
+import java.io.*;
+
 
 public class Render {
     private final JPanel panelLogin = new JPanel();
@@ -90,7 +93,7 @@ public class Render {
         ScreenSize.add(fullscreenItem);
 
         // create exit option
-        JMenuItem exitItem = new JMenuItem("Exit");
+        JMenuItem exitItem = new JMenuItem("Exit Game");
         exitItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -100,13 +103,59 @@ public class Render {
         });
         Menu.add(exitItem);
 
+        JMenu songMenu = new JMenu("Select music");
+        songMenu.addActionListener(new ActionListener() {
+
+        public void actionPerformed(ActionEvent e) {
+            System.exit(0);
+        }
+
+    });
+        Menu.add(songMenu);
+        JMenuItem song1 = new JMenuItem("Song 1");
+        song1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Song 1 selected");
+                // TODO: play Song 1
+
+            }
+        });
+        songMenu.add(song1);
+        JMenuItem song2 = new JMenuItem("Song 2");
+        song2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Song 2 selected");
+                // TODO: play Song 2
+            }
+        });
+        songMenu.add(song2);
+
+        JMenuItem song3 = new JMenuItem("Song 3");
+        song3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Song 3 selected");
+                // TODO: play Song 3
+            }
+        });
+        songMenu.add(song3);
+
+        JMenuItem stopSong = new JMenuItem("Stop the music");
+        song3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Music stopped!");
+                // TODO: Stop playing music
+
+            }
+        });
+        songMenu.add(song3);
+
+
+
         // add menu bar to frame
         frame.setJMenuBar(menuBar);
+
+
     }
-
-
-
-
 
     public void BoardRender(String[][] board, boolean turn, String opponent, String gameType, boolean[][] validMoves) {
         int rows = board.length; //Get number of rows
@@ -234,4 +283,39 @@ public class Render {
 
         popup.show(frame, frame.getWidth() / 2, frame.getHeight() / 2); //Show popup menu
     }
+
+    private void playMenuMusic() {
+        try {
+            // Load the music file
+            File musicFile = new File("menu_music.wav");
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(musicFile);
+
+            // Create a clip to play the music
+            Clip musicClip = AudioSystem.getClip();
+            musicClip.open(audioStream);
+
+            // Start playing the music in a loop
+            musicClip.loop(Clip.LOOP_CONTINUOUSLY);
+
+            // Create a dialog box to allow the user to select the song to play
+            String[] songNames = {"Song 1", "Song 2", "Song 3"};
+            int songChoice = JOptionPane.showOptionDialog(frame, "Select a song to play", "Menu Music",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+                    songNames, songNames[0]);
+
+            // Stop the music clip
+            musicClip.stop();
+
+            // Play the selected song
+            String songFilename = "song" + (songChoice + 1) + ".wav";
+            File songFile = new File(songFilename);
+            AudioInputStream songStream = AudioSystem.getAudioInputStream(songFile);
+            Clip songClip = AudioSystem.getClip();
+            songClip.open(songStream);
+            songClip.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }
