@@ -12,12 +12,14 @@ public class AIReversi implements AI {
     private int totalMoves = 0;
     private int myPieces;
     private int opponentPieces;
+    private StatsFrame statsFrame;
 
     public AIReversi(String myPiece, String opponentPiece, String type, Reversi reversi) {
         this.myPiece = myPiece;
         this.opponentPiece = opponentPiece;
         this.type = type;
         this.reversi = reversi;
+        this.statsFrame = statsFrame;
     }
 
     public int GetBestMove(Board board) {

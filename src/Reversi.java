@@ -1,9 +1,16 @@
 public class Reversi {
+    private int blackCount;
+    private int whiteCount;
+    private int totalMoves;
+
     public Reversi(Board board) {
         board.setBoard(3, 3, "⚪");
         board.setBoard(3, 4, "⚫");
         board.setBoard(4, 3, "⚫");
         board.setBoard(4, 4, "⚪");
+        blackCount = 2;
+        whiteCount = 2;
+        totalMoves = 0;
     }
 
     public void CheckCaptures(Board board, int move, String playerIcon) {
@@ -24,6 +31,23 @@ public class Reversi {
                     break;
                 }
             }
+            int capturedCount = playerIcon == "⚫" ? whiteCount : blackCount;
+            if (capturedCount > 2) {
+                capturedCount -= 2;
+                if (playerIcon == "⚫") {
+                    whiteCount -= capturedCount;
+                    blackCount += capturedCount;
+                } else {
+                    blackCount -= capturedCount;
+                    whiteCount += capturedCount;
+                }
+            }
+            totalMoves++;
+
+            // print stats
+            System.out.println("Black pieces: " + blackCount);
+            System.out.println("White pieces: " + whiteCount);
+            System.out.println("Total moves: " + totalMoves);
         }
         // check for captures in the south direction from the move location
         if (row + 1 < board.getRows() && board.getBoard()[row + 1][col] == opponentIcon) {

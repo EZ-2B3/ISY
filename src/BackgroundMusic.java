@@ -4,8 +4,8 @@ import javax.sound.sampled.*;
 
 public class BackgroundMusic {
 
-    private Clip[] clips;
-    private int currentClipIndex; // the index of the currently playing clip
+    private static Clip[] clips;
+    private static int currentClipIndex; // the index of the currently playing clip
 
     public BackgroundMusic(String[] fileNames) { // fileNames is an array of file names
         clips = new Clip[fileNames.length];
@@ -27,12 +27,17 @@ public class BackgroundMusic {
         return clip;
     }
 
-    public void play() { // plays the current clip
-        clips[currentClipIndex].loop(Clip.LOOP_CONTINUOUSLY);
+    public void play(int clipIndex) { // plays the clip with the specified index
+        stopCurrent(); // stop the currently playing clip
+        currentClipIndex = clipIndex; // set the current clip index to the specified index
+        clips[currentClipIndex].loop(Clip.LOOP_CONTINUOUSLY); // play the new clip
     }
 
-    public void stop() { // stops the current clip
-        clips[currentClipIndex].stop();
+
+    public void stopMusic() { // stops the current clip
+        if (clips[currentClipIndex].isRunning()) {
+            clips[currentClipIndex].stop();
+        }
     }
 
     public void nextTrack() { // plays the next clip
@@ -40,4 +45,10 @@ public class BackgroundMusic {
         currentClipIndex = (currentClipIndex + 1) % clips.length;
         clips[currentClipIndex].loop(Clip.LOOP_CONTINUOUSLY);
     }
+
+    public static void stopCurrent() { // stops the currently playing clip
+        clips[currentClipIndex].stop();
+    }
+
+
 }

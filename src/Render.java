@@ -46,14 +46,14 @@ public class Render {
 
         // create settings menu
         JMenu Settings = new JMenu("Settings");
-        menuBar.add(Settings);
+        Menu.add(Settings);
 
         // create screen size submenu
         JMenu ScreenSize = new JMenu("Screen Size");
         Settings.add(ScreenSize);
 
         // create 500x500 option
-        JMenuItem size500Item = new JMenuItem("500x500");
+        JMenuItem size500Item = new JMenuItem("Small window");
         size500Item.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -63,7 +63,7 @@ public class Render {
         ScreenSize.add(size500Item);
 
         // create 800x600 option
-        JMenuItem size800Item = new JMenuItem("800x600");
+        JMenuItem size800Item = new JMenuItem("Medium window");
         size800Item.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -73,7 +73,7 @@ public class Render {
         ScreenSize.add(size800Item);
 
         // create 1024x768 option
-        JMenuItem size1024Item = new JMenuItem("1024x768");
+        JMenuItem size1024Item = new JMenuItem("Large window");
         size1024Item.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -81,7 +81,6 @@ public class Render {
             }
         });
         ScreenSize.add(size1024Item);
-
         // create fullscreen option
         JMenuItem fullscreenItem = new JMenuItem("Fullscreen");
         fullscreenItem.addActionListener(new ActionListener() {
@@ -91,7 +90,6 @@ public class Render {
             }
         });
         ScreenSize.add(fullscreenItem);
-
         // create exit option
         JMenuItem exitItem = new JMenuItem("Exit Game");
         exitItem.addActionListener(new ActionListener() {
@@ -99,19 +97,21 @@ public class Render {
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
-
         });
         Menu.add(exitItem);
 
+        String[] fileNames = {"src/Sounds/Snowfall.wav","src/Sounds/brute_force.wav", "src/Sounds/nightdelivery5.wav"};
+        BackgroundMusic backgroundMusic = new BackgroundMusic(fileNames);
+
         JMenu songMenu = new JMenu("Select music");
         songMenu.addActionListener(new ActionListener() {
-
         public void actionPerformed(ActionEvent e) {
             System.exit(0);
         }
 
     });
-        Menu.add(songMenu);
+        Settings.add(songMenu);
+        final Clip[] currentClip = {null};
 
         JMenuItem song1 = new JMenuItem("Song 1");
         song1.addActionListener(new ActionListener() {
@@ -119,12 +119,7 @@ public class Render {
                 System.out.println("Song 1 selected");
                 try {
                     // Load audio file
-                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("song1.wav"));
-                    Clip clip = AudioSystem.getClip();
-                    clip.open(audioIn);
-
-                    // Start playing audio
-                    clip.start();
+                    backgroundMusic.play(0);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -137,13 +132,8 @@ public class Render {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Song 2 selected");
                 try {
-                    // Load audio file
-                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("src/Sounds/brute_force.wav"));
-                    Clip clip = AudioSystem.getClip();
-                    clip.open(audioIn);
-
-                    // Start playing audio
-                    clip.start();
+                    // stops the current song
+                    backgroundMusic.play(1);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -157,20 +147,12 @@ public class Render {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Song 3 selected");
                 try {
-
-
-                    // Load audio file
-                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("src/Sounds/nightdelivery5.wav"));
-                    Clip clip = AudioSystem.getClip();
-                    clip.open(audioIn);
-
-                    // Start playing audio
-                    clip.start();
+                    // stops the current song
+                    backgroundMusic.play(2);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
-
         });
         songMenu.add(song3);
 
@@ -178,13 +160,10 @@ public class Render {
         stopSong.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Music stopped!");
-                // Stop current playing clips
-
-
+                BackgroundMusic.stopCurrent(); // stop the current clip
             }
         });
         songMenu.add(stopSong);
-
 
 
         // add menu bar to frame
@@ -318,40 +297,6 @@ public class Render {
         popup.add(menuItem3); //Add menu item to popup menu
 
         popup.show(frame, frame.getWidth() / 2, frame.getHeight() / 2); //Show popup menu
-    }
-
-    private void playMenuMusic() {
-        try {
-            // Load the music file
-            File musicFile = new File("menu_music.wav");
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(musicFile);
-
-            // Create a clip to play the music
-            Clip musicClip = AudioSystem.getClip();
-            musicClip.open(audioStream);
-
-            // Start playing the music in a loop
-            musicClip.loop(Clip.LOOP_CONTINUOUSLY);
-
-            // Create a dialog box to allow the user to select the song to play
-            String[] songNames = {"Song 1", "Song 2", "Song 3"};
-            int songChoice = JOptionPane.showOptionDialog(frame, "Select a song to play", "Menu Music",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
-                    songNames, songNames[0]);
-
-            // Stop the music clip
-            musicClip.stop();
-
-            // Play the selected song
-            String songFilename = "song" + (songChoice + 1) + ".wav";
-            File songFile = new File(songFilename);
-            AudioInputStream songStream = AudioSystem.getAudioInputStream(songFile);
-            Clip songClip = AudioSystem.getClip();
-            songClip.open(songStream);
-            songClip.loop(Clip.LOOP_CONTINUOUSLY);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
 }
