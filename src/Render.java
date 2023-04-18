@@ -32,24 +32,21 @@ public class Render {
         UpdateFrame(panelLogin);
     }
 
-    public void BoardRender(String[][] board, boolean turn, String opponent) {
+    public void BoardRender(String[][] board, boolean turn, String opponent, String gameType, boolean[][] validMoves) {
         int rows = board.length;
         int cols = board[0].length;
         panelBoard.removeAll();
-        frame.setTitle("Tic-Tac-Toe - " + opponent + " - " + (turn ? "Your turn" : "Opponent's turn"));
+        frame.setTitle(gameType + " - " + opponent + " - " + (turn ? "Your turn" : "Opponent's turn"));
         panelBoard.setLayout(new GridLayout(rows, cols));
         int n = 0;
         for (String[] strings : board) {
             for (int j = 0; j < cols; j++) {
                 JButton button = new JButton(strings[j]);
-                if (!turn || !strings[j].equals(" ")) {
-                    button.setEnabled(false);
-                } else {
-                    button.setEnabled(true);
-                    button.setName(String.valueOf(n));
-                    button.setActionCommand("move");
-                    button.addActionListener(actionListener);
-                }
+                button.setFont(new Font("", Font.PLAIN, 25));
+                button.setEnabled(validMoves[n / cols][n % cols] && turn);
+                button.setName(String.valueOf(n));
+                button.addActionListener(actionListener);
+                button.setActionCommand("move");
                 panelBoard.add(button);
                 n++;
             }
@@ -88,11 +85,15 @@ public class Render {
 
     private void CreateGameChoice() {
         JButton ticTacToe = new JButton("Tic-Tac-Toe");
+        JButton reversi = new JButton("Reversi");
         JButton challenge = new JButton("Challenge");
         JButton exit = new JButton("Exit");
 
         ticTacToe.addActionListener(this.actionListener);
         panelGameChoice.add(ticTacToe);
+
+        reversi.addActionListener(this.actionListener);
+        panelGameChoice.add(reversi);
 
         challenge.addActionListener(this.actionListener);
         panelGameChoice.add(challenge);
@@ -128,6 +129,7 @@ public class Render {
     }
 
     public void GameOverRender(String result, String opponent) {
+        // TODO: GameType meenemen
         JPopupMenu popup = new JPopupMenu();
 
         JLabel label = new JLabel(result);
@@ -139,7 +141,7 @@ public class Render {
         popup.add(menuItem);
 
         JMenuItem menuItem2 = new JMenuItem("Subscribe to this gametype again");
-        menuItem2.setActionCommand("Tic-Tac-Toe");
+        menuItem2.setActionCommand("Reversi");
         menuItem2.addActionListener(this.actionListener);
         popup.add(menuItem2);
 
